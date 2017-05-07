@@ -1,4 +1,4 @@
-[![Build Status](https://master-ci.org/gndplayground/react-hoc-form-validatable.svg?branch=master)](https://master-ci.org/gndplayground/react-hoc-form-validatable)
+[![Build Status](https://travis-ci.org/gndplayground/react-hoc-form-validatable.svg?branch=master)](https://travis-ci.org/gndplayground/react-hoc-form-validatable)
 [![Coverage Status](https://coveralls.io/repos/github/gndplayground/react-hoc-form-validatable/badge.svg?branch=master)](https://coveralls.io/github/gndplayground/react-hoc-form-validatable?branch=master)
 
 `react-hoc-form-validatable` is a library has a higher order form and input components that help validate form easily, 
