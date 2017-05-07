@@ -1,0 +1,19 @@
+language: node_js
+sudo: required
+node_js: stable
+before_install:
+- npm install -g babel-cli
+script:
+- yarn run lint
+- yarn run test
+- ./node_modules/coveralls/bin/coveralls.js <./coverage/lcov.info
+before_deploy:
+- yarn run demo
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: demo/
+  on:
+    branch: master
+dist: trusty
