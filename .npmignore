@@ -1,0 +1,7 @@
+.idea/
+/coverage/
+/src/
+/spec/
+/dev/
+/__mocks__/
+/postcss.config.js

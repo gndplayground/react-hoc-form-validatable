@@ -1,0 +1,37 @@
+{
+  // Extend existing configuration
+  // from ESlint and eslint-plugin-react defaults.
+  "extends": [
+    "airbnb"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+
+  "parser": "babel-eslint",
+
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-console": 0,
+    "no-confusing-arrow": ["error", {"allowParens": true}],
+    "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+    "quotes": [2, "single"],
+    "no-underscore-dangle": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "react/no-unused-prop-types": [1],
+    "react/forbid-prop-types": [0],
+    "no-param-reassign": [2, {
+      "props": false
+    }],
+    "react/require-default-props": 0,
+    "guard-for-in": 0,
+    "no-useless-escape": 0
+  }
+}
