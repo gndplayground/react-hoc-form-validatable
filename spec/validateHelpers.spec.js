@@ -72,8 +72,9 @@ describe('Check validate function', () => {
 
     expect(response).toEqual({
       check: false,
+      errorRule: 'minLength',
       message: {
-        en: 'This field length must be at least 10 character',
+        en: 'This field length must be at least 10 characters',
         vi: 'Ô này phải chứa ít nhất 10 ký tự',
       },
     });
@@ -84,6 +85,7 @@ describe('Check validate function', () => {
 
     expect(response).toEqual({
       check: true,
+      errorRule: '',
       message: '',
     });
   });

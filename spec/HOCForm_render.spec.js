@@ -75,7 +75,7 @@ describe('Test render validate form with no async rules', () => {
         validated: true,
         errorMessage:
         {
-          en: 'This field length must be at least 4 character',
+          en: 'This field length must be at least 4 characters',
           vi: 'Ô này phải chứa ít nhất 4 ký tự',
         },
       }));
@@ -105,7 +105,7 @@ describe('Test render validate form with no async rules', () => {
         validated: true,
         errorMessage:
         {
-          en: 'This field length must be at least 4 character',
+          en: 'This field length must be at least 4 characters',
           vi: 'Ô này phải chứa ít nhất 4 ký tự',
         },
       }));

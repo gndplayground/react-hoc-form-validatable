@@ -97,6 +97,7 @@ export function validate(value, ruleString, listRule, allInputs) {
       ruleNameAndParams.params,
       allInputs,
     );
+    response.errorRule = response.check ? '' : ruleNameAndParams.ruleName;
     response.message = response.check ?
       '' :
       formatMessage(listRule[ruleNameAndParams.ruleName].message.error, ruleNameAndParams.params);
