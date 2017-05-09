@@ -1,3 +1,4 @@
+import deepClone from 'lodash.clonedeep';
 /**
  * Validate the value base on rule name
  * @param {Object} ruleOb
@@ -41,7 +42,6 @@ export function checkRule(ruleOb, value, params, allInputs) {
 export function getRuleNameAndParams(rule) {
   let params = [];
   let ruleName = rule;
-
   if (ruleName.indexOf(',') !== -1) {
     const temp = ruleName.split(',');
 
@@ -69,7 +69,15 @@ export function getRuleNameAndParams(rule) {
  * @returns {*}
  */
 export function formatMessage(message, params) {
-  const cloneMessage = Object.assign({}, message);
+  if (typeof message === 'string') {
+    let msg = message;
+    for (let i = 0; i < params.length; i += 1) {
+      msg = msg.replace(`{${i}}`, params[i]);
+    }
+    return msg;
+  }
+
+  const cloneMessage = deepClone(message);
   for (const messageLang in cloneMessage) {
     for (let i = 0; i < params.length; i += 1) {
       cloneMessage[messageLang] = cloneMessage[messageLang].replace(`{${i}}`, params[i]);
@@ -87,6 +95,13 @@ export function formatMessage(message, params) {
  * @returns {{check: Boolean, message: Object}}
  */
 export function validate(value, ruleString, listRule, allInputs) {
+  if (!ruleString) {
+    return {
+      check: true,
+      message: '',
+      errorRule: '',
+    };
+  }
   const response = {};
   const rules = ruleString.split('|');
   for (let i = 0; i < rules.length; i += 1) {
@@ -97,6 +112,7 @@ export function validate(value, ruleString, listRule, allInputs) {
       ruleNameAndParams.params,
       allInputs,
     );
+    response.errorRule = response.check ? '' : rules[i];
     response.message = response.check ?
       '' :
       formatMessage(listRule[ruleNameAndParams.ruleName].message.error, ruleNameAndParams.params);

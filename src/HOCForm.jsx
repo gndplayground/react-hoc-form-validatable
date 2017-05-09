@@ -81,6 +81,7 @@ const HOCForm = Component =>
      * React life cycle
      */
     componentWillUnmount() {
+      this._isUnmounted = true;
       this._clearPromises();
     }
 
@@ -103,15 +104,17 @@ const HOCForm = Component =>
     };
 
     _unRegister = (input) => {
-      this.setState((state) => {
-        const newState = cloneDeep(state.inputs);
-        if (newState[input]) {
-          delete newState[input];
-        }
-        return {
-          inputs: newState,
-        };
-      });
+      if (!this._isUnmounted) {
+        this.setState((state) => {
+          const newState = cloneDeep(state.inputs);
+          if (newState[input]) {
+            delete newState[input];
+          }
+          return {
+            inputs: newState,
+          };
+        });
+      }
     };
 
     /**
@@ -121,7 +124,7 @@ const HOCForm = Component =>
      * @private
      */
     _register = (input, dataInput) => {
-      if (!this.state.submitted) {
+      if (!this.state.submitted && !this._isUnmounted) {
         this.setState((state) => {
           const hasError = typeof dataInput.error === 'undefined' ? state.hasError : this._checkHasError(dataInput.error, input, state.inputs);
           const inputs = Object.assign(state.inputs, {
@@ -155,6 +158,7 @@ const HOCForm = Component =>
           validated: false,
           dirty: true,
           value,
+          errorRule: response.errorRule,
           error: !response.check,
           errorMessage: response.message,
         });
@@ -178,6 +182,7 @@ const HOCForm = Component =>
             value,
             dirty: true,
             error: !result,
+            errorRule: !result ? this.state.inputs[name].asyncRule : '',
             errorMessage: result ? '' : formatMessage(
               this.props.rules[ruleNameAndParams.ruleName].message.error,
               ruleNameAndParams.params,
@@ -195,6 +200,7 @@ const HOCForm = Component =>
           value,
           error: !response.check,
           errorMessage: response.message,
+          errorRule: response.errorRule,
         });
       }
     };
@@ -251,6 +257,7 @@ const HOCForm = Component =>
                 dirty: { $set: true },
                 error: { $set: !response.check },
                 errorMessage: { $set: response.message },
+                errorRule: { $set: response.errorRule },
               },
             },
           });
@@ -294,25 +301,31 @@ const HOCForm = Component =>
       if (Object.keys(inputsAsyncRule).length > 0) {
         for (const input in inputsAsyncRule) {
           inputsAsyncRule[input].rule.then((result) => {
-            this.setState(
-              state => update(state, {
-                hasError: { $set: this._checkHasError(!result, input, state.inputs) },
-                inputs: {
-                  [input]: {
-                    $merge: {
-                      validated: true,
-                      dirty: true,
-                      error: !result,
-                      pending: false,
-                      errorMessage: !result ? formatMessage(this.props.rules[state.inputs[input].asyncRule].message.error, []) : '',
+            if (!this._isUnmounted) {
+              this.setState(
+                (state) => {
+                  const ruleNameAndParam = getRuleNameAndParams(state.inputs[input].asyncRule);
+                  return update(state, {
+                    hasError: { $set: this._checkHasError(!result, input, state.inputs) },
+                    inputs: {
+                      [input]: {
+                        $merge: {
+                          validated: true,
+                          dirty: true,
+                          error: !result,
+                          pending: false,
+                          errorRule: !result ? state.inputs[input].asyncRule : '',
+                          errorMessage: !result ? formatMessage(this.props.rules[ruleNameAndParam.ruleName].message.error, ruleNameAndParam.params) : '',
+                        },
+                      },
                     },
-                  },
+                  });
                 },
-              }),
-              () => {
-                this._formSubmitSumUp(this.state);
-              },
-            );
+                () => {
+                  this._formSubmitSumUp(this.state);
+                },
+              );
+            }
           }).catch((err) => {
             console.error(err);
           });
@@ -329,21 +342,22 @@ const HOCForm = Component =>
      */
     _formSubmit = (event) => {
       event.preventDefault();
+      if (!this._isUnmounted) {
+        this.setState({
+          submitted: true,
+        }, () => {
+          const prepare = this._formSubmitStagePrepare(
+            this.state, this.props.rules,
+            this.onCheckInputPromise,
+          );
+          const newState = prepare.newState;
+          const inputsAsyncRule = prepare.inputsAsyncRule;
 
-      this.setState({
-        submitted: true,
-      }, () => {
-        const prepare = this._formSubmitStagePrepare(
-          this.state, this.props.rules,
-          this.onCheckInputPromise,
-        );
-        const newState = prepare.newState;
-        const inputsAsyncRule = prepare.inputsAsyncRule;
-
-        this.setState(newState, () => {
-          this._formSubmitStageHandle(inputsAsyncRule, this.state);
+          this.setState(newState, () => {
+            this._formSubmitStageHandle(inputsAsyncRule, this.state);
+          });
         });
-      });
+      }
     };
 
 
@@ -352,13 +366,15 @@ const HOCForm = Component =>
      * @private
      */
     _doneSubmit = (shouldReset) => {
-      this.setState({
-        submitted: false,
-      }, () => {
-        if (shouldReset) {
-          this._reset();
-        }
-      });
+      if (!this._isUnmounted) {
+        this.setState({
+          submitted: false,
+        }, () => {
+          if (shouldReset) {
+            this._reset();
+          }
+        });
+      }
     };
 
     /**
@@ -389,7 +405,7 @@ const HOCForm = Component =>
      * @private
      */
     _reset = () => {
-      if (!this.state.submitted) {
+      if (!this.state.submitted && !this._isUnmounted) {
         this._clearPromises();
         const newState = cloneDeep(this.state);
         newState.hasError = false;
@@ -405,6 +421,9 @@ const HOCForm = Component =>
               },
               validated: {
                 $set: false,
+              },
+              errorRule: {
+                $set: '',
               },
               pending: {
                 $set: false,

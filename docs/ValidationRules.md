@@ -11,6 +11,7 @@ const ruleObDefault = {
   isEmail: {
     rule: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     message: {
+      // The library support object key value message
       error: {
         en: 'This field must be a valid email address.',
         vi: 'Hãy nhập một địa chỉ email hợp lệ vào ô này',
@@ -23,12 +24,10 @@ const ruleObDefault = {
     rule(value) {
       return (!(value === null || value === ''));
     },
-
+    
+    // If you just want send a simple string not a object, do it! 
     message: {
-      error: {
-        en: 'This field must be not empty',
-        vi: 'Ô này không đươc để trống',
-      },
+      error: 'This field must be not empty',
     },
   },
 
@@ -130,7 +129,7 @@ asyncTestTrue: {
 
 ## Messages
 
-When the input value is not passed the validation rule. The input will receive the prop `errorMessage`.
+When the input value is not passed the validation rule. The input will receive formatted message with the prop `errorMessage`.
 
 We have to add error message for each rule via `message` property
 

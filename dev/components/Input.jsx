@@ -48,7 +48,7 @@ class Input extends React.Component {
         {this.props.error ? (
           <div
             className={`${style.errorMessage} ${this.props.errorClassName || ''}`}
-          > {this.props.errorMessage[this.props.lang]}</div>
+          > {typeof this.props.errorMessage === 'string' ? this.props.errorMessage : this.props.errorMessage[this.props.lang]}</div>
         ) : ''}
       </div>
     );

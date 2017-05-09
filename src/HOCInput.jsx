@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatMessage, getRuleNameAndParams } from './validateHelpers';
 
 
 /**
@@ -21,6 +22,10 @@ const HOCInput = Component =>
       rule: React.PropTypes.string,
       asyncRule: React.PropTypes.string,
       defaultValue: React.PropTypes.any,
+      customErrorMessages: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.object,
+      ]),
     };
 
     /**
@@ -83,32 +88,54 @@ const HOCInput = Component =>
     };
 
     /**
+     * Get message for input by default message or custom message
+     * @param {Object} input - Current Input state
+     * @param {Object} listCustomMessage - List custom error messages
+     * @returns {String|Object}
+     * @private
+     */
+    _getMessage = (input, listCustomMessage) => {
+      if (input.errorRule) {
+        const errorRuleAndParam = getRuleNameAndParams(input.errorRule);
+        if (input.error && listCustomMessage && listCustomMessage[errorRuleAndParam.ruleName]) {
+          return formatMessage(
+             listCustomMessage[errorRuleAndParam.ruleName],
+             errorRuleAndParam.params,
+           );
+        }
+      }
+      return input.errorMessage;
+    };
+
+    /**
      * Return wrapped component with props
      * @returns {ReactElement}
      */
     render() {
       const input = this.context.validateInputs[this.props.name];
       return (
-          input ?
-            <Component
-              {...this.props}
-              lang={this.context.validateLang}
-              submitted={this.context.validateSubmitted}
-              validated={input.validated}
-              value={input.value}
-              dirty={input.dirty}
-              error={input.error}
-              pending={input.pending}
-              errorMessage={input.errorMessage}
-              defaultValue={this.props.defaultValue}
-              name={this.props.name}
-              onBlur={this._inputOnBlur}
-              onChange={this._inputOnchange}
-            /> : <span />
+        input ?
+          <Component
+            {...this.props}
+            lang={this.context.validateLang}
+            submitted={this.context.validateSubmitted}
+            validated={input.validated}
+            value={input.value}
+            dirty={input.dirty}
+            error={input.error}
+            pending={input.pending}
+            errorMessage={
+              this._getMessage(input, this.props.customErrorMessages)
+            }
+            defaultValue={this.props.defaultValue}
+            name={this.props.name}
+            onBlur={this._inputOnBlur}
+            onChange={this._inputOnchange}
+          /> : <span />
 
       );
     }
-};
+  };
 
 
 export default HOCInput;
