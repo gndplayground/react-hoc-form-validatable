@@ -64,15 +64,29 @@ describe('Check formatMessage function', () => {
       vi: 'Do 0 and 1',
     });
   });
+
+  it('Should format message string with params correct', () => {
+    expect(formatMessage('Do {0} and {1}', [0, 1])).toEqual('Do 0 and 1');
+  });
 });
 
 describe('Check validate function', () => {
+  it('Should return check true when ruleString is empty', () => {
+    const response = validate('123456', '');
+
+    expect(response).toEqual({
+      check: true,
+      errorRule: '',
+      message: '',
+    });
+  });
+
   it('Should check a rule that return object check false and error message', () => {
     const response = validate('123456', 'minLength,10', defaultRules);
 
     expect(response).toEqual({
       check: false,
-      errorRule: 'minLength',
+      errorRule: 'minLength,10',
       message: {
         en: 'This field length must be at least 10 characters',
         vi: 'Ô này phải chứa ít nhất 10 ký tự',

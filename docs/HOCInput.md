@@ -2,14 +2,15 @@
 If you know to work with React context you can rewrite it to work best with your app. 
 Even though the component is good enough and you shouldn't rewrite it.
 
-## Required props
+## Props in HOCInput
 
-`HOCInput` has some props that required to start
+`HOCInput` has some props that you can send to start
 
-* `name` {String} Name of the input
+* `name` {String} (Required) - Name of the input
 * `rule` {String} Normal validation rules 
 * `asyncRule` {String} Promise validation rule
 * `defaultValue` {Any} Default value of the input
+* `customErrorMessages` {String|Object} Custom error messages
 
 Example 
 
@@ -21,13 +22,20 @@ Example
   defaultValue="abc"
   rule="notEmpty|minLength,4"
   asyncRule="asyncTestTrue,2000"
+  customErrorMessages={{
+      notEmpty: 'custom error for notEmpty',
+      minLength: {
+        en: 'custom error minLength {0} en',
+        vi: 'custom error minLength {0} vi',
+      },
+  }}
 />
 
 ```
 
 ## Props send to wrapped component
 
-`HOCInput` will wrap your component and send these props to your input component
+`HOCInput` will wrap your component and send these props to your input component.
 
 
 * `lang` {String} Language receive from the `HOCForm`
@@ -42,6 +50,16 @@ Example
 * `name` {String} Name of the input
 * `onBlur` {Function} Handler when user focus out the input
 * `onChange` {Function} Handler when user change the value of the input
+
+Props send to `HOCInput` also sent to your wrapped component.
+
+```javascript
+<Input      
+  // Custom props will send to your wrapped component
+  customProps="custom"
+  //...
+/>
+```
 
 Please see the example source to understand how to integrate with `HOCInput` 
 

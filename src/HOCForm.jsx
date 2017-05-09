@@ -181,8 +181,8 @@ const HOCForm = Component =>
             validated: true,
             value,
             dirty: true,
-            errorRule: response.errorRule,
             error: !result,
+            errorRule: !result ? this.state.inputs[name].asyncRule : '',
             errorMessage: result ? '' : formatMessage(
               this.props.rules[ruleNameAndParams.ruleName].message.error,
               ruleNameAndParams.params,
@@ -199,8 +199,8 @@ const HOCForm = Component =>
           pending: false,
           value,
           error: !response.check,
-          errorRule: response.errorRule,
           errorMessage: response.message,
+          errorRule: response.errorRule,
         });
       }
     };
@@ -257,6 +257,7 @@ const HOCForm = Component =>
                 dirty: { $set: true },
                 error: { $set: !response.check },
                 errorMessage: { $set: response.message },
+                errorRule: { $set: response.errorRule },
               },
             },
           });
@@ -302,20 +303,24 @@ const HOCForm = Component =>
           inputsAsyncRule[input].rule.then((result) => {
             if (!this._isUnmounted) {
               this.setState(
-                state => update(state, {
-                  hasError: { $set: this._checkHasError(!result, input, state.inputs) },
-                  inputs: {
-                    [input]: {
-                      $merge: {
-                        validated: true,
-                        dirty: true,
-                        error: !result,
-                        pending: false,
-                        errorMessage: !result ? formatMessage(this.props.rules[state.inputs[input].asyncRule].message.error, []) : '',
+                state => {
+                  const ruleNameAndParam = getRuleNameAndParams(state.inputs[input].asyncRule);
+                  return update(state, {
+                    hasError: { $set: this._checkHasError(!result, input, state.inputs) },
+                    inputs: {
+                      [input]: {
+                        $merge: {
+                          validated: true,
+                          dirty: true,
+                          error: !result,
+                          pending: false,
+                          errorRule: !result ? state.inputs[input].asyncRule : '',
+                          errorMessage: !result ? formatMessage(this.props.rules[ruleNameAndParam.ruleName].message.error, ruleNameAndParam.params) : '',
+                        },
                       },
                     },
-                  },
-                }),
+                  });
+                },
                 () => {
                   this._formSubmitSumUp(this.state);
                 },
@@ -416,6 +421,9 @@ const HOCForm = Component =>
               },
               validated: {
                 $set: false,
+              },
+              errorRule: {
+                $set: '',
               },
               pending: {
                 $set: false,

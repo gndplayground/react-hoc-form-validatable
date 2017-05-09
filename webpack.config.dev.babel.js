@@ -46,7 +46,7 @@ const config = {
     extensions: ['.js', '.jsx'],
   },
 
-  devtool: 'source-map',
+  devtool: 'cheap-module-inline-source-map',
 
   devServer: {
     stats: 'errors-only',
