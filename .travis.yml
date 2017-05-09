@@ -7,6 +7,10 @@ script:
 - yarn run lint
 - yarn run test
 - ./node_modules/coveralls/bin/coveralls.js <./coverage/lcov.info
+branches:
+  only:
+      - gh-pages
+      - /.*/
 before_deploy:
 - yarn run demo
 deploy:
@@ -16,5 +20,5 @@ deploy:
   local_dir: demo/
   target_branch: gh-pages
   on:
-    branch: gh-pages
+    branch: master
 dist: trusty
