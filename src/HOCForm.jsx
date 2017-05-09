@@ -303,7 +303,7 @@ const HOCForm = Component =>
           inputsAsyncRule[input].rule.then((result) => {
             if (!this._isUnmounted) {
               this.setState(
-                state => {
+                (state) => {
                   const ruleNameAndParam = getRuleNameAndParams(state.inputs[input].asyncRule);
                   return update(state, {
                     hasError: { $set: this._checkHasError(!result, input, state.inputs) },

@@ -11,7 +11,7 @@ const ruleObDefault = {
 
   notEmpty: {
     rule(value) {
-      return (!(value === null || value === ''));
+      return (!(value === null || value === '' || value === undefined));
     },
 
     message: {
