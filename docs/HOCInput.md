@@ -45,7 +45,7 @@ Example
 * `dirty` {Boolean} Check if the input is modified value
 * `error` {Boolean} Check if the input fail the validation
 * `pending` {Boolean} Check if the input is validating.
-* `errorMessage` {String} Current error message of the input
+* `errorMessage` {Object|String} Current error message of the input
 * `defaultValue` {Any} Default value from props
 * `name` {String} Name of the input
 * `onBlur` {Function} Handler when user focus out the input

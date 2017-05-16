@@ -428,6 +428,9 @@ const HOCForm = Component =>
               pending: {
                 $set: false,
               },
+              errorMessage: {
+                $set: '',
+              },
               value: {
                 $set: newState.inputs[input].defaultValue || '',
               },
@@ -438,6 +441,7 @@ const HOCForm = Component =>
     };
 
     render() {
+      this.rendered = true;
       return (
         <Component
           {...this.props}
