@@ -5,3 +5,13 @@
 /dev/
 /__mocks__/
 /postcss.config.js
+webpack.config.demo.babel.js
+webpack.config.dev.babel.js
+webpack.config.dist.babel.js
+.travis.yml
+.babelrc
+.eslintrc
+.gitignore
+index.html
+postcss.config.js
+yarn.lock

@@ -442,7 +442,6 @@ const HOCForm = Component =>
     };
 
     render() {
-      this.rendered = true;
       return (
         <Component
           {...this.props}
