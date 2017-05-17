@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import style from './styles/input.css';
 import HOCInput from '../../src/HOCInput';
 
@@ -56,26 +57,26 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
-  inputClassName: React.PropTypes.string,
-  wrapClassName: React.PropTypes.string,
-  errorClassName: React.PropTypes.string,
-  label: React.PropTypes.string,
-  value: React.PropTypes.any,
-  defaultValue: React.PropTypes.any,
-  error: React.PropTypes.bool,
-  validated: React.PropTypes.bool,
-  errorMessage: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.object,
+  inputClassName: PropTypes.string,
+  wrapClassName: PropTypes.string,
+  errorClassName: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.any,
+  defaultValue: PropTypes.any,
+  error: PropTypes.bool,
+  validated: PropTypes.bool,
+  errorMessage: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
   ]),
-  pending: React.PropTypes.bool,
-  dirty: React.PropTypes.bool,
-  lang: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  onBlur: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  submitted: React.PropTypes.bool.isRequired,
+  pending: PropTypes.bool,
+  dirty: PropTypes.bool,
+  lang: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  submitted: PropTypes.bool.isRequired,
 };
 
 

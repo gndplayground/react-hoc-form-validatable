@@ -408,6 +408,7 @@ describe('Test methods for HOCForm', () => {
       instance.setState({
         inputs: {
           name: {
+            errorMessage: 'asasa',
             dirty: true,
             validated: true,
             pending: true,
@@ -421,6 +422,7 @@ describe('Test methods for HOCForm', () => {
       instance._reset();
 
       expect(instance.state.inputs.name).toEqual(jasmine.objectContaining({
+        errorMessage: '',
         dirty: false,
         validated: false,
         pending: false,

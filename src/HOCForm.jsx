@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import update from 'immutability-helper';
 import cloneDeep from 'lodash.clonedeep';
 import { validate, getRuleNameAndParams, formatMessage } from './validateHelpers';
@@ -15,9 +16,9 @@ const HOCForm = Component =>
      * @property {function} submitCallback - Callback when form submit success
      */
     static propTypes = {
-      validateLang: React.PropTypes.string.isRequired,
-      rules: React.PropTypes.object.isRequired,
-      submitCallback: React.PropTypes.func,
+      validateLang: PropTypes.string.isRequired,
+      rules: PropTypes.object.isRequired,
+      submitCallback: PropTypes.func,
     };
 
     /**
@@ -427,6 +428,9 @@ const HOCForm = Component =>
               },
               pending: {
                 $set: false,
+              },
+              errorMessage: {
+                $set: '',
               },
               value: {
                 $set: newState.inputs[input].defaultValue || '',

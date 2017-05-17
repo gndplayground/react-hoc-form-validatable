@@ -1,6 +1,9 @@
 language: node_js
 sudo: required
 node_js: stable
+cache:
+  directories:
+  - node_modules
 before_install:
 - npm install -g babel-cli
 script:
