@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { formatMessage, getRuleNameAndParams } from './validateHelpers';
 
 
@@ -18,13 +19,13 @@ const HOCInput = Component =>
      * @property {*} defaultValue - Default value of the input
      */
     static propTypes = {
-      name: React.PropTypes.string.isRequired,
-      rule: React.PropTypes.string,
-      asyncRule: React.PropTypes.string,
-      defaultValue: React.PropTypes.any,
-      customErrorMessages: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.object,
+      name: PropTypes.string.isRequired,
+      rule: PropTypes.string,
+      asyncRule: PropTypes.string,
+      defaultValue: PropTypes.any,
+      customErrorMessages: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
       ]),
     };
 
@@ -34,12 +35,12 @@ const HOCInput = Component =>
      * @property {function} validateRegister - Handle Register or update state of the input to form
      */
     static contextTypes = {
-      validateLang: React.PropTypes.string.isRequired,
-      validateInputOnChange: React.PropTypes.func.isRequired,
-      validateInputs: React.PropTypes.object,
-      validateRegister: React.PropTypes.func.isRequired,
-      validateSubmitted: React.PropTypes.bool.isRequired,
-      validateUnRegister: React.PropTypes.func.isRequired,
+      validateLang: PropTypes.string.isRequired,
+      validateInputOnChange: PropTypes.func.isRequired,
+      validateInputs: PropTypes.object,
+      validateRegister: PropTypes.func.isRequired,
+      validateSubmitted: PropTypes.bool.isRequired,
+      validateUnRegister: PropTypes.func.isRequired,
     };
 
     /**

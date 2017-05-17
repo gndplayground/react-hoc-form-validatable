@@ -31,12 +31,12 @@ const HOCForm = Component =>
      * @property {Boolean} validateSubmitted - The form is submitting
      */
     static childContextTypes = {
-      validateLang: React.PropTypes.string.isRequired,
-      validateInputOnChange: React.PropTypes.func.isRequired,
-      validateInputs: React.PropTypes.object,
-      validateRegister: React.PropTypes.func.isRequired,
-      validateUnRegister: React.PropTypes.func.isRequired,
-      validateSubmitted: React.PropTypes.bool,
+      validateLang: PropTypes.string.isRequired,
+      validateInputOnChange: PropTypes.func.isRequired,
+      validateInputs: PropTypes.object,
+      validateRegister: PropTypes.func.isRequired,
+      validateUnRegister: PropTypes.func.isRequired,
+      validateSubmitted: PropTypes.bool,
     };
 
     /**
