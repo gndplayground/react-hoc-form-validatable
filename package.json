@@ -1,11 +1,17 @@
 {
   "name": "react-hoc-form-validatable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React higher order components for validate form. Can use with Promise",
   "main": "lib/index.js",
   "author": "giang.nguyen.dev@gmail.com",
   "repository": "https://github.com/gndplayground/react-hoc-form-validatable",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "validation",
+    "form",
+    "higher order component"
+  ],
   "scripts": {
     "dev": "webpack-dev-server --hot --history-api-fallback --env.dev --config webpack.config.dev.babel.js",
     "demo": "NODE_ENV='production' webpack --config webpack.config.demo.babel.js",

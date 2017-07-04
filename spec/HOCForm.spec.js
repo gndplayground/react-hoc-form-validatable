@@ -124,7 +124,6 @@ describe('Test methods for HOCForm', () => {
       expect(response).toEqual({
         newState: {
           hasError: true,
-          submitted: false,
           inputs: {
             name: {
               validated: true,
@@ -161,6 +160,7 @@ describe('Test methods for HOCForm', () => {
       const rules = Object.assign({}, defaultRules, asyncRule);
 
       const state = {
+        submitted: true,
         inputs: {
           name: {
             asyncRule: 'asyncTest',
@@ -252,7 +252,6 @@ describe('Test methods for HOCForm', () => {
       expect(response).toEqual({
         newState: {
           hasError: true,
-          submitted: false,
           inputs: {
             name: {
               validated: true,

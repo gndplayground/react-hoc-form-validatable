@@ -26,4 +26,4 @@ Before use this library you should have knowledge about Higher Order Component.
 About React context you should understand it to know how the input states flow through the form and custom your own higher order input component, but it's not mandatory. Higher Order Component should be enough.
 
 You should check [the docs](https://github.com/gndplayground/react-hoc-form-validatable/tree/master/docs) and [the demo source](https://github.com/gndplayground/react-hoc-form-validatable/tree/master/dev/examples)  
-to see how to use it
+to see how to use it.
