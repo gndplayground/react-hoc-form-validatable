@@ -275,7 +275,6 @@ const HOCForm = Component =>
      * @private
      */
     _formSubmitSumUp = (state) => {
-      console.log(state);
       let doneCheck = true;
       for (const input in state.inputs) {
         doneCheck = !state.inputs[input].pending;
