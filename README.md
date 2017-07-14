@@ -1,10 +1,11 @@
 [![Build Status](https://travis-ci.org/gndplayground/react-hoc-form-validatable.svg?branch=master)](https://travis-ci.org/gndplayground/react-hoc-form-validatable)
 [![Coverage Status](https://coveralls.io/repos/github/gndplayground/react-hoc-form-validatable/badge.svg?branch=master)](https://coveralls.io/github/gndplayground/react-hoc-form-validatable?branch=master)
+[![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 `react-hoc-form-validatable` is a library has a higher order form and input components that help validate form easily, 
 especially with asynchronous validate come from the server with the help of Promise ES6.
 
-The library aim to create a validatable component that easy to work with any other input components.
+The library aim to create a validatable component that easy to work with any other input components. 
 So you can make your own form components with your own styling.
 
 Install 
