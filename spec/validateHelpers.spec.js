@@ -11,7 +11,11 @@ describe('Test checkRule function', () => {
     };
     const params = [5];
 
-    expect(checkRule(rule, '123456', params)).toBe(true);
+    const input = {
+      value: '123456',
+    };
+
+    expect(checkRule(rule, input, params, {})).toBe(true);
   });
 
   it('Should return false when check rule object is not correct', () => {
@@ -22,7 +26,11 @@ describe('Test checkRule function', () => {
     };
     const params = [5];
 
-    expect(checkRule(rule, '123', params)).toBe(false);
+    const input = {
+      value: '123',
+    };
+
+    expect(checkRule(rule, input, params, {})).toBe(false);
   });
 
   it('Should return true when check rule regex is correct', () => {
@@ -30,7 +38,7 @@ describe('Test checkRule function', () => {
       rule: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     };
 
-    expect(checkRule(rule, 'giang.nguyen.dev@gmail.com')).toBe(true);
+    expect(checkRule(rule, { value: 'giang.nguyen.dev@gmail.com' })).toBe(true);
   });
 
   it('Should return false when check rule regex is not correct', () => {
@@ -38,12 +46,12 @@ describe('Test checkRule function', () => {
       rule: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     };
 
-    expect(checkRule(rule, 'giang.nguyen.dev')).toBe(false);
+    expect(checkRule(rule, { value: 'giang.nguyen.dev' })).toBe(false);
   });
 
   it('Should return false when rule object is not a object or Regex', () => {
-    expect(checkRule({}, 'aaaa', [])).toBe(false);
-    expect(checkRule('aaaa', 'aaaa', [])).toBe(false);
+    expect(checkRule({}, { value: 'aaaa' }, [])).toBe(false);
+    expect(checkRule('aaaa', { value: 'aaaa' }, [])).toBe(false);
   });
 });
 
@@ -72,7 +80,7 @@ describe('Check formatMessage function', () => {
 
 describe('Check validate function', () => {
   it('Should return check true when ruleString is empty', () => {
-    const response = validate('123456', '');
+    const response = validate({ value: '123456' }, '');
 
     expect(response).toEqual({
       check: true,
@@ -82,7 +90,7 @@ describe('Check validate function', () => {
   });
 
   it('Should check a rule that return object check false and error message', () => {
-    const response = validate('123456', 'minLength,10', defaultRules);
+    const response = validate({ value: '123456', rule: 'minLength,10' }, defaultRules);
 
     expect(response).toEqual({
       check: false,
@@ -95,7 +103,7 @@ describe('Check validate function', () => {
   });
 
   it('Should check a rule that return object check true and empty error message', () => {
-    const response = validate('123456', 'minLength,5', defaultRules);
+    const response = validate({ value: '123456', rule: 'minLength,5' }, defaultRules);
 
     expect(response).toEqual({
       check: true,

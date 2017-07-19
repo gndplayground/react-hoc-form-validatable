@@ -2,24 +2,24 @@ import deepClone from 'lodash.clonedeep';
 /**
  * Validate the value base on rule name
  * @param {Object} ruleOb
- * @param {*} value
+ * @param {Object} input
  * @param {Array} params
  * @param {Object} allInputs
  * @returns {Boolean} Return false when value is not pass the rule otherwise return true
  */
-export function checkRule(ruleOb, value, params, allInputs) {
+export function checkRule(ruleOb, input, params, allInputs) {
   const type = typeof ruleOb.rule;
 
   switch (type) {
 
     case 'function':
 
-      return ruleOb.rule(value, params, allInputs);
+      return ruleOb.rule(input.value, params, input, allInputs);
 
     case 'object':
 
       if (ruleOb.rule instanceof RegExp) {
-        return ruleOb.rule.test(value);
+        return ruleOb.rule.test(input.value);
       }
 
       break;
@@ -88,14 +88,13 @@ export function formatMessage(message, params) {
 
 /**
  * Validate input value
- * @param {any} value
- * @param {String} ruleString
+ * @param {Object} input
  * @param {Object} listRule
  * @param {Object} allInputs
  * @returns {{check: Boolean, message: Object}}
  */
-export function validate(value, ruleString, listRule, allInputs) {
-  if (!ruleString) {
+export function validate(input, listRule, allInputs) {
+  if (!input.rule) {
     return {
       check: true,
       message: '',
@@ -103,12 +102,12 @@ export function validate(value, ruleString, listRule, allInputs) {
     };
   }
   const response = {};
-  const rules = ruleString.split('|');
+  const rules = input.rule.split('|');
   for (let i = 0; i < rules.length; i += 1) {
     const ruleNameAndParams = getRuleNameAndParams(rules[i]);
     response.check = checkRule(
       listRule[ruleNameAndParams.ruleName],
-      value,
+      input,
       ruleNameAndParams.params,
       allInputs,
     );

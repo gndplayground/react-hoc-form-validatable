@@ -50,6 +50,7 @@ const HOCInput = Component =>
       this.context.validateRegister(
         this.props.name,
         {
+          name: this.props.name,
           defaultValue: this.props.defaultValue,
           value: this.props.defaultValue || '',
           rule: this.props.rule,
@@ -68,14 +69,8 @@ const HOCInput = Component =>
      * @private
      */
     _inputOnchange = (e) => {
-      this.context.validateRegister(
-        this.props.name,
-        {
-          value: e.target.value,
-        },
-      );
       e.persist();
-      this.context.validateInputOnChange(e.target.name, e.target.value);
+      this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
     };
 
     /**
@@ -85,7 +80,7 @@ const HOCInput = Component =>
      */
     _inputOnBlur = (e) => {
       e.persist();
-      this.context.validateInputOnChange(e.target.name, e.target.value);
+      this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
     };
 
     /**
