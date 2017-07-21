@@ -120,6 +120,7 @@ const HOCInput = Component =>
             submitted={this.context.validateSubmitted}
             validated={input.validated}
             value={input.value}
+            files={input.files}
             dirty={input.dirty}
             error={input.error}
             pending={input.pending}
