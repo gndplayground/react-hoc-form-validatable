@@ -19,6 +19,10 @@ So you can make your own form components with your own styling.
 
 `npm -i react-hoc-form-validatable`
 
+or
+
+`yarn add react-hoc-form-validatable`
+
 ## Demo
 [Demo online](https://gndplayground.github.io/react-hoc-form-validatable)
 
