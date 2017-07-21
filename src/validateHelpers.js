@@ -64,20 +64,30 @@ export function getRuleNameAndParams(rule) {
  * @example
  * // returns This field length must be min 3 characters and max 7 characters
  * formatMessage('This field length must be min {0} characters and max {1} characters', ['3', '7'])
- * @param message
- * @param params
+ * @param {String|Object|Function} message
+ * @param {Array} params
+ * @param {Object} input
+ * @param {Object} allInputs
  * @returns {*}
  */
-export function formatMessage(message, params) {
-  if (typeof message === 'string') {
-    let msg = message;
+export function formatMessage(message, params, input, allInputs) {
+  let rawMessage;
+
+  if (typeof message === 'function') {
+    rawMessage = message(input.value, params, input, allInputs);
+  } else {
+    rawMessage = message;
+  }
+
+  if (typeof rawMessage === 'string') {
+    let msg = rawMessage;
     for (let i = 0; i < params.length; i += 1) {
       msg = msg.replace(`{${i}}`, params[i]);
     }
     return msg;
   }
 
-  const cloneMessage = deepClone(message);
+  const cloneMessage = deepClone(rawMessage);
   for (const messageLang in cloneMessage) {
     for (let i = 0; i < params.length; i += 1) {
       cloneMessage[messageLang] = cloneMessage[messageLang].replace(`{${i}}`, params[i]);
@@ -114,7 +124,12 @@ export function validate(input, listRule, allInputs) {
     response.errorRule = response.check ? '' : rules[i];
     response.message = response.check ?
       '' :
-      formatMessage(listRule[ruleNameAndParams.ruleName].message.error, ruleNameAndParams.params);
+      formatMessage(
+        listRule[ruleNameAndParams.ruleName].message.error,
+        ruleNameAndParams.params,
+        input,
+        allInputs,
+      );
     if (!response.check) break;
   }
   return response;

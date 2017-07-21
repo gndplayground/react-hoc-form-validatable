@@ -197,6 +197,8 @@ const HOCForm = Component =>
             errorMessage: result ? '' : formatMessage(
               this.props.rules[ruleNameAndParams.ruleName].message.error,
               ruleNameAndParams.params,
+              newInputState,
+              currentInputsState,
             ),
             pending: false,
           });
@@ -325,7 +327,14 @@ const HOCForm = Component =>
                           error: !result,
                           pending: false,
                           errorRule: !result ? state.inputs[input].asyncRule : '',
-                          errorMessage: !result ? formatMessage(this.props.rules[ruleNameAndParam.ruleName].message.error, ruleNameAndParam.params) : '',
+                          errorMessage: !result ?
+                            formatMessage(
+                              this.props.rules[ruleNameAndParam.ruleName].message.error,
+                              ruleNameAndParam.params,
+                              state.inputs[input],
+                              state.inputs,
+                            )
+                            : '',
                         },
                       },
                     },

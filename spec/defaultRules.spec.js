@@ -81,3 +81,17 @@ describe('isAlpha rule', () => {
     expect(defaultRules.isAlpha.rule.test('abcAA1')).toEqual(false);
   });
 });
+
+
+describe('isInt rule', () => {
+  it('Should return true when value is int', () => {
+    expect(defaultRules.isInt.rule('1')).toEqual(true);
+    expect(defaultRules.isInt.rule('12')).toEqual(true);
+    expect(defaultRules.isInt.rule('-8')).toEqual(true);
+  });
+
+  it('Should return false when value is not int', () => {
+    expect(defaultRules.isInt.rule('abcAA1')).toEqual(false);
+    expect(defaultRules.isInt.rule('5.3')).toEqual(false);
+  });
+});

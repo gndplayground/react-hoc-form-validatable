@@ -59,10 +59,7 @@ const CustomErrorMessageExample = () => (
           asyncRule="asyncTestFalse,1000"
           customErrorMessages={{
             notEmpty: 'custom error for notEmpty',
-            asyncTestFalse: {
-              en: 'custom error message for asyncTestFalse lang {0} en',
-              vi: 'custom error message for asyncTestFalse lang {0} vi',
-            },
+            asyncTestFalse: value => `custom error async test false - value: ${value}`,
           }}
         />
 

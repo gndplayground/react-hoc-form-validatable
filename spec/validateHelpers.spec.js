@@ -76,6 +76,52 @@ describe('Check formatMessage function', () => {
   it('Should format message string with params correct', () => {
     expect(formatMessage('Do {0} and {1}', [0, 1])).toEqual('Do 0 and 1');
   });
+
+  it('Should format message type of function correct with function return string', () => {
+    const input = {
+      name: 'input',
+      value: 'value',
+    };
+
+    const otherInputs = {
+      other: {
+        name: 'other input',
+        value: 'other input value',
+      },
+    };
+
+    const messageFunction = (value, params, _input, _otherInputs) =>
+      `${input.name} ${value} {0} ${_otherInputs.other.name} ${_otherInputs.other.value}`;
+
+    expect(formatMessage(messageFunction, ['param'], input, otherInputs))
+      .toEqual('input value param other input other input value');
+  });
+
+  it('Should format message type of function correct with function return object', () => {
+    const input = {
+      name: 'input',
+      value: 'value',
+    };
+
+    const otherInputs = {
+      other: {
+        name: 'other input',
+        value: 'other input value',
+      },
+    };
+
+    const messageFunction = (value, params, _input, _otherInputs) => ({
+      en: `en ${input.name} ${value} {0} ${_otherInputs.other.name} ${_otherInputs.other.value}`,
+      vi: `vi ${input.name} ${value} {0} ${_otherInputs.other.name} ${_otherInputs.other.value}`,
+    });
+
+    const result = formatMessage(messageFunction, ['param'], input, otherInputs);
+
+    expect(result.en)
+      .toEqual('en input value param other input other input value');
+    expect(result.vi)
+      .toEqual('vi input value param other input other input value');
+  });
 });
 
 describe('Check validate function', () => {

@@ -87,16 +87,19 @@ const HOCInput = Component =>
      * Get message for input by default message or custom message
      * @param {Object} input - Current Input state
      * @param {Object} listCustomMessage - List custom error messages
+     * @param {Object} allInputs - All inputs state
      * @returns {String|Object}
      * @private
      */
-    _getMessage = (input, listCustomMessage) => {
+    _getMessage = (input, listCustomMessage, allInputs) => {
       if (input.errorRule) {
         const errorRuleAndParam = getRuleNameAndParams(input.errorRule);
         if (input.error && listCustomMessage && listCustomMessage[errorRuleAndParam.ruleName]) {
           return formatMessage(
              listCustomMessage[errorRuleAndParam.ruleName],
              errorRuleAndParam.params,
+             input,
+             allInputs,
            );
         }
       }
@@ -121,7 +124,7 @@ const HOCInput = Component =>
             error={input.error}
             pending={input.pending}
             errorMessage={
-              this._getMessage(input, this.props.customErrorMessages)
+              this._getMessage(input, this.props.customErrorMessages, this.context.validateInputs)
             }
             defaultValue={this.props.defaultValue}
             name={this.props.name}
