@@ -21,6 +21,7 @@ class Input extends React.Component {
         }
         <div className={style.inputWrap}>
           <input
+            multiple={this.props.multiple}
             disabled={this.props.submitted}
             value={this.props.value}
             className={`${this._getClassName({
@@ -71,6 +72,7 @@ Input.propTypes = {
   ]),
   pending: PropTypes.bool,
   dirty: PropTypes.bool,
+  multiple: PropTypes.bool,
   lang: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

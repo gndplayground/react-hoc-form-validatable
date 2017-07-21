@@ -42,6 +42,7 @@ const validateRules = Object.assign({}, defaultRules, extendDemoRules);
 const CustomErrorMessageExample = () => (
   <div>
     <h2>Custom error message</h2>
+    <p>Custom message in the Input Component will override error message from validation rule</p>
     <Form
       validateLang="en"
       submitCallback={handlerSubmit}
@@ -59,10 +60,7 @@ const CustomErrorMessageExample = () => (
           asyncRule="asyncTestFalse,1000"
           customErrorMessages={{
             notEmpty: 'custom error for notEmpty',
-            asyncTestFalse: {
-              en: 'custom error message for asyncTestFalse lang {0} en',
-              vi: 'custom error message for asyncTestFalse lang {0} vi',
-            },
+            asyncTestFalse: value => `custom error async test false - value: ${value}`,
           }}
         />
 

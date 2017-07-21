@@ -40,6 +40,27 @@ describe('Test render validate form with async rules always return true', () => 
           },
         },
       },
+
+      asyncTestCalculatedMessage: {
+        rule: (value, params, input, allInputs) => {
+          return cancelAblePromise(new Promise((resolve) => {
+            setTimeout(() => {
+              if (parseInt(input.value, 10) !== 1 || allInputs.email.value !== 'abc@abc.com') {
+                resolve(true);
+              } else {
+                resolve(false);
+              }
+            }, 10);
+          }))
+        },
+
+        message: {
+          error: (value, params, input, allInputs) => ({
+            en: `en ${value} ${params[0]} ${input.value} ${allInputs.email.value}`,
+            vi: `vi ${value} ${params[0]} ${input.value} ${allInputs.email.value}`,
+          }),
+        },
+      },
     };
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
@@ -82,6 +103,17 @@ describe('Test render validate form with async rules always return true', () => 
                 name="password"
                 rule="notEmpty|minLength,6"
               />
+
+              <Input
+                label="Test"
+                errorClassName="error-message"
+                inputClassName="input"
+                wrapClassName="input-group"
+                type="test"
+                name="test"
+                rule="notEmpty"
+                asyncRule="asyncTestCalculatedMessage,abc"
+              />
             </div>
 
             <br />
@@ -108,7 +140,36 @@ describe('Test render validate form with async rules always return true', () => 
       }));
     });
 
-    it('Should validated async rule and return new props with pending state when input has no error', (done) => {
+    it('Should have accessable to current input state and all inputs state in rule function', (done) => {
+      const emailInput = FromTestRender.find('input[name="email"]');
+      emailInput.simulate('change', { target: { value: 'abc@abc.com', name: 'email' } });
+
+      const calcInput = FromTestRender.find('input[name="test"]');
+      calcInput.simulate('change', { target: { value: '1', name: 'test' } });
+
+      jest.runOnlyPendingTimers();
+      setTimeout(() => {
+        try {
+          expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+            value: '1',
+            error: true,
+            dirty: true,
+            validated: true,
+            pending: false,
+            errorMessage: {
+              en: 'en 1 abc 1 abc@abc.com',
+              vi: 'vi 1 abc 1 abc@abc.com',
+            },
+          }));
+          done();
+        } catch (e) {
+          console.log(e);
+        }
+      }, 100);
+      jest.runOnlyPendingTimers();
+    });
+
+    it('Should validate input success after done promise', (done) => {
       const userName = FromTestRender.find('input[name="userName"]');
       userName.simulate('change', { target: { value: '12345', name: 'userName' } });
       jest.runOnlyPendingTimers();
@@ -185,47 +246,110 @@ describe('Test render validate form with async rules always return true', () => 
       const userName = FromTestRender.find('input[name="userName"]');
       const email = FromTestRender.find('input[name="email"]');
       const password = FromTestRender.find('input[name="password"]');
+      const test = FromTestRender.find('input[name="test"]');
       userName.simulate('change', { target: { value: '12345', name: 'userName' } });
       email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
       password.simulate('change', { target: { value: '123456', name: 'password' } });
+      test.simulate('change', { target: { value: '5', name: 'test' } });
       jest.runOnlyPendingTimers();
+
+      FromTestRender.find('form').simulate('submit');
 
       setTimeout(() => {
         try {
-          FromTestRender.find('form').simulate('submit');
-
-          setTimeout(() => {
-            try {
-              expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
-                value: '12345',
-                error: false,
-                dirty: true,
-                validated: true,
-                pending: false,
-              }));
-              expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
-                value: 'giang.nguyen.dev@gmail.com',
-                error: false,
-                dirty: true,
-                validated: true,
-                pending: false,
-              }));
-              expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
-                error: false,
-                dirty: true,
-                validated: true,
-              }));
-
-              expect(handlerSubmit.called).toEqual(true);
-              done();
-            } catch (e) {
-              console.log(e);
-            }
-          }, 100);
+          expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+            value: '5',
+            error: false,
+            dirty: true,
+            validated: true,
+            errorMessage: '',
+            pending: false,
+          }));
+          done();
         } catch (e) {
           console.log(e);
         }
-      }, 50);
+      }, 100);
+
+      // setTimeout(() => {
+      //   try {
+      //     FromTestRender.find('form').simulate('submit');
+      //
+      //     setTimeout(() => {
+      //       try {
+      //         expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      //           value: '12345',
+      //           error: false,
+      //           dirty: true,
+      //           validated: true,
+      //           pending: false,
+      //         }));
+      //         expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      //           value: 'giang.nguyen.dev@gmail.com',
+      //           error: false,
+      //           dirty: true,
+      //           validated: true,
+      //           pending: false,
+      //         }));
+      //         expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      //           error: false,
+      //           dirty: true,
+      //           validated: true,
+      //         }));
+      //
+      //         expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+      //           error: false,
+      //           dirty: true,
+      //           validated: true,
+      //         }));
+      //
+      //         expect(handlerSubmit.called).toEqual(true);
+      //         done();
+      //       } catch (e) {
+      //         console.log(e);
+      //       }
+      //     }, 100);
+      //   } catch (e) {
+      //     console.log(e);
+      //   }
+      // }, 50);
+
+      jest.runOnlyPendingTimers();
+    });
+
+    it('Should access able to current input state and all input state when called submit', (done) => {
+      const userName = FromTestRender.find('input[name="userName"]');
+      const password = FromTestRender.find('input[name="password"]');
+      userName.simulate('change', { target: { value: '12345', name: 'userName' } });
+      password.simulate('change', { target: { value: '123456', name: 'password' } });
+      const email = FromTestRender.find('input[name="email"]');
+      const test = FromTestRender.find('input[name="test"]');
+      email.simulate('change', { target: { value: 'abc@abc.com', name: 'email' } });
+      test.simulate('change', { target: { value: '1', name: 'test' } });
+      jest.runOnlyPendingTimers();
+
+      try {
+        FromTestRender.find('form').simulate('submit');
+
+        setTimeout(() => {
+          try {
+            expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+              error: true,
+              dirty: true,
+              validated: true,
+              errorMessage: {
+                en: 'en 1 abc 1 abc@abc.com',
+                vi: 'vi 1 abc 1 abc@abc.com',
+              },
+            }));
+            done();
+          } catch (e) {
+            console.log(e);
+          }
+        }, 100);
+      } catch (e) {
+        console.log(e);
+      }
 
       jest.runOnlyPendingTimers();
     });

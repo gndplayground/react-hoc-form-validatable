@@ -72,6 +72,17 @@ const ruleObDefault = {
     },
   },
 
+  isInt: {
+    rule: value => !isNaN(value) && (value % 1 === 0),
+
+    message: {
+      error: {
+        en: 'This field must be integer',
+        vi: 'Ô này phải là một số nguyên',
+      },
+    },
+  },
+
   isAlpha: {
     rule: /^[A-Z]+$/i,
 

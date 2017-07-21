@@ -143,14 +143,21 @@ const HOCForm = Component =>
      * Handle input onchange value
      * @param {String} name
      * @param {*} value
+     * @param {FileList} files
      * @private
      */
-    _checkInput = (name, value) => {
+    _checkInput = (name, value, files) => {
+      const newInputState = update(this.state.inputs[name], {
+        value: { $set: value },
+        files: { $set: files },
+      });
+
+      const currentInputsState = cloneDeep(this.state.inputs);
+
       const response = validate(
-        value,
-        this.state.inputs[name].rule,
+        newInputState,
         this.props.rules,
-        this.state.inputs,
+        currentInputsState,
       );
 
       if (response.check && this.state.inputs[name].asyncRule) {
@@ -159,6 +166,7 @@ const HOCForm = Component =>
           validated: false,
           dirty: true,
           value,
+          files,
           errorRule: response.errorRule,
           error: !response.check,
           errorMessage: response.message,
@@ -174,19 +182,23 @@ const HOCForm = Component =>
         this.onCheckInputPromise[name] = this.props.rules[ruleNameAndParams.ruleName].rule(
           value,
           ruleNameAndParams.params,
-          this.state.inputs,
+          newInputState,
+          currentInputsState,
         );
 
         this.onCheckInputPromise[name].then((result) => {
           this._register(name, {
             validated: true,
             value,
+            files,
             dirty: true,
             error: !result,
             errorRule: !result ? this.state.inputs[name].asyncRule : '',
             errorMessage: result ? '' : formatMessage(
               this.props.rules[ruleNameAndParams.ruleName].message.error,
               ruleNameAndParams.params,
+              newInputState,
+              currentInputsState,
             ),
             pending: false,
           });
@@ -198,6 +210,7 @@ const HOCForm = Component =>
           validated: true,
           dirty: true,
           pending: false,
+          files,
           value,
           error: !response.check,
           errorMessage: response.message,
@@ -224,22 +237,20 @@ const HOCForm = Component =>
         }
         if (newState.inputs[input].pending || !newState.inputs[input].validated) {
           const response = validate(
-            newState.inputs[input].value,
-            newState.inputs[input].rule,
+            newState.inputs[input],
             rules,
             newState.inputs,
           );
-
           if (newState.inputs[input].asyncRule) {
             if (response.check) {
               const ruleNameAndParams = getRuleNameAndParams(newState.inputs[input].asyncRule);
-
               inputsAsyncRule[input] = {
                 name: newState.inputs[input].asyncRule,
                 value: newState.inputs[input].value,
                 rule: rules[ruleNameAndParams.ruleName].rule(
                   newState.inputs[input].value,
                   ruleNameAndParams.params,
+                  newState.inputs[input],
                   newState.inputs,
                 ),
               };
@@ -315,7 +326,14 @@ const HOCForm = Component =>
                           error: !result,
                           pending: false,
                           errorRule: !result ? state.inputs[input].asyncRule : '',
-                          errorMessage: !result ? formatMessage(this.props.rules[ruleNameAndParam.ruleName].message.error, ruleNameAndParam.params) : '',
+                          errorMessage: !result ?
+                            formatMessage(
+                              this.props.rules[ruleNameAndParam.ruleName].message.error,
+                              ruleNameAndParam.params,
+                              state.inputs[input],
+                              state.inputs,
+                            )
+                            : '',
                         },
                       },
                     },
@@ -327,6 +345,9 @@ const HOCForm = Component =>
               );
             }
           }).catch((err) => {
+            if (err.isCanceled) {
+              return;
+            }
             console.error(err);
           });
         }
@@ -433,6 +454,9 @@ const HOCForm = Component =>
               },
               value: {
                 $set: newState.inputs[input].defaultValue || '',
+              },
+              files: {
+                $set: undefined,
               },
             }));
         }
