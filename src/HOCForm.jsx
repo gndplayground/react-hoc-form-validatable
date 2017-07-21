@@ -241,17 +241,16 @@ const HOCForm = Component =>
             rules,
             newState.inputs,
           );
-
           if (newState.inputs[input].asyncRule) {
             if (response.check) {
               const ruleNameAndParams = getRuleNameAndParams(newState.inputs[input].asyncRule);
-
               inputsAsyncRule[input] = {
                 name: newState.inputs[input].asyncRule,
                 value: newState.inputs[input].value,
                 rule: rules[ruleNameAndParams.ruleName].rule(
                   newState.inputs[input].value,
                   ruleNameAndParams.params,
+                  newState.inputs[input],
                   newState.inputs,
                 ),
               };
@@ -346,6 +345,9 @@ const HOCForm = Component =>
               );
             }
           }).catch((err) => {
+            if (err.isCanceled) {
+              return;
+            }
             console.error(err);
           });
         }

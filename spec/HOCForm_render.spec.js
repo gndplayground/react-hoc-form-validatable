@@ -15,13 +15,32 @@ describe('Test render validate form with no async rules', () => {
   let handlerSubmit;
   beforeEach(() => {
     handlerSubmit = spy();
+    const extendDemoRules = {
+      testCalculatedMessage: {
+        rule: (value, params, input, allInputs) => {
+          if (parseInt(input.value, 10) !== 1 || allInputs.email.value !== 'abc@abc.com') {
+            return true;
+          }
+          return false;
+        },
+
+        message: {
+          error: (value, params, input, allInputs) => ({
+            en: `en ${value} ${params[0]} ${input.value} ${allInputs.email.value}`,
+            vi: `vi ${value} ${params[0]} ${input.value} ${allInputs.email.value}`,
+          }),
+        },
+      },
+    };
+
+    const validateRules = Object.assign({}, defaultRules, extendDemoRules);
     FormTest = React.createClass({
       render() {
         return (
           <Form
             submitCallback={handlerSubmit}
             validateLang="en"
-            rules={defaultRules}
+            rules={validateRules}
           >
             <div>
               <Input
@@ -50,6 +69,16 @@ describe('Test render validate form with no async rules', () => {
                 type="password"
                 name="password"
                 rule="notEmpty|minLength,6"
+              />
+
+              <Input
+                label="Test"
+                errorClassName="error-message"
+                inputClassName="input"
+                wrapClassName="input-group"
+                type="test"
+                name="test"
+                rule="notEmpty|testCalculatedMessage,abc"
               />
             </div>
 
@@ -107,6 +136,24 @@ describe('Test render validate form with no async rules', () => {
         {
           en: 'This field length must be at least 4 characters',
           vi: 'Ô này phải chứa ít nhất 4 ký tự',
+        },
+      }));
+    });
+
+    it('Should accessable input state and all inputs state', () => {
+      const email = FromTestRender.find('input[name="test"]');
+      email.simulate('change', { target: { value: 'abc@abc.com', name: 'email' } });
+      const test = FromTestRender.find('input[name="test"]');
+      test.simulate('change', { target: { value: '1', name: 'test' } });
+      expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+        value: '1',
+        error: true,
+        dirty: true,
+        validated: true,
+        pending: false,
+        errorMessage: {
+          en: 'en 1 abc 1 abc@abc.com',
+          vi: 'vi 1 abc 1 abc@abc.com',
         },
       }));
     });
@@ -182,10 +229,12 @@ describe('Test render validate form with no async rules', () => {
       const email = FromTestRender.find('input[name="email"]');
       const userName = FromTestRender.find('input[name="userName"]');
       const password = FromTestRender.find('input[name="password"]');
+      const test = FromTestRender.find('input[name="test"]');
 
-      email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
+      email.simulate('change', { target: { value: 'abc@abc.com', name: 'email' } });
       userName.simulate('change', { target: { value: 'abcd121121', name: 'userName' } });
       password.simulate('change', { target: { value: '1234567', name: 'password' } });
+      test.simulate('change', { target: { value: '5', name: 'test' } });
 
       FromTestRender.find('form').simulate('submit');
 
@@ -204,6 +253,13 @@ describe('Test render validate form with no async rules', () => {
       }));
 
       expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+        submitted: true,
+        error: false,
+        dirty: true,
+        validated: true,
+      }));
+
+      expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
         submitted: true,
         error: false,
         dirty: true,
