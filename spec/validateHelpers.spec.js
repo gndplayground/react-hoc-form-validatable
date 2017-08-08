@@ -135,6 +135,29 @@ describe('Check validate function', () => {
     });
   });
 
+  it('Should return check true when input is optional and value is empty', () => {
+    const response = validate({ value: '', rule: 'minLength,10', optional: true }, defaultRules);
+
+    expect(response).toEqual({
+      check: true,
+      errorRule: '',
+      message: '',
+    });
+  });
+
+  it('Should check a rule that return object check false and error message with input is optional and has value', () => {
+    const response = validate({ value: '1', rule: 'minLength,10', optional: true}, defaultRules);
+
+    expect(response).toEqual({
+      check: false,
+      errorRule: 'minLength,10',
+      message: {
+        en: 'This field length must be at least 10 characters',
+        vi: 'Ô này phải chứa ít nhất 10 ký tự',
+      },
+    });
+  });
+
   it('Should check a rule that return object check false and error message', () => {
     const response = validate({ value: '123456', rule: 'minLength,10' }, defaultRules);
 

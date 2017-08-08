@@ -10,6 +10,7 @@ import AsyncExample from '../examples/AsyncExample';
 import CustomErrorMessageExample from '../examples/CustomErrorMessageExample';
 import FileExample from '../examples/FileExample';
 import CalculatedErrorMessageExample from '../examples/CalculatedErrorMessageExample';
+import OptionalExample from '../examples/OptionalInput';
 
 const Routers = () => (
   <HashRouter>
@@ -17,6 +18,7 @@ const Routers = () => (
       <h1>Example for `react-hoc-form-validatable`</h1>
       <ul>
         <li><Link to="/">Basic demo</Link></li>
+        <li><Link to="/examples/optional">Optional Input</Link></li>
         <li><Link to="/examples/dynamic">Dynamic Example</Link></li>
         <li><Link to="/examples/async">Async Example</Link></li>
         <li><Link to="/examples/calculated-error-message">Calculated Error Message Example</Link></li>
@@ -32,6 +34,7 @@ const Routers = () => (
       <Route exact path="/examples/calculated-error-message" component={CalculatedErrorMessageExample} />
       <Route exact path="/examples/custom-error-message" component={CustomErrorMessageExample} />
       <Route exact path="/examples/files" component={FileExample} />
+      <Route exact path="/examples/optional" component={OptionalExample} />
     </div>
   </HashRouter>
 );

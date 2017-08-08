@@ -160,7 +160,10 @@ const HOCForm = Component =>
         currentInputsState,
       );
 
-      if (response.check && this.state.inputs[name].asyncRule) {
+      if (response.check
+        && newInputState.asyncRule
+        && (!newInputState.optional || (newInputState.optional && newInputState.value))
+      ) {
         this._register(name, {
           pending: true,
           validated: false,
@@ -241,20 +244,24 @@ const HOCForm = Component =>
             rules,
             newState.inputs,
           );
-          if (newState.inputs[input].asyncRule) {
-            if (response.check) {
-              const ruleNameAndParams = getRuleNameAndParams(newState.inputs[input].asyncRule);
-              inputsAsyncRule[input] = {
-                name: newState.inputs[input].asyncRule,
-                value: newState.inputs[input].value,
-                rule: rules[ruleNameAndParams.ruleName].rule(
+          if (response.check
+              && newState.inputs[input].asyncRule
+              && (
+                  !newState.inputs[input].optional
+                  || (newState.inputs[input] && newState.inputs[input].value)
+                )
+          ) {
+            const ruleNameAndParams = getRuleNameAndParams(newState.inputs[input].asyncRule);
+            inputsAsyncRule[input] = {
+              name: newState.inputs[input].asyncRule,
+              value: newState.inputs[input].value,
+              rule: rules[ruleNameAndParams.ruleName].rule(
                   newState.inputs[input].value,
                   ruleNameAndParams.params,
                   newState.inputs[input],
                   newState.inputs,
                 ),
-              };
-            }
+            };
           }
 
           const hasError = this._checkHasError(!response.check, input, newState.inputs);

@@ -104,7 +104,7 @@ export function formatMessage(message, params, input, allInputs) {
  * @returns {{check: Boolean, message: Object}}
  */
 export function validate(input, listRule, allInputs) {
-  if (!input.rule) {
+  if (!input.rule || (input.optional && !input.value)) {
     return {
       check: true,
       message: '',

@@ -27,6 +27,7 @@ const HOCInput = Component =>
         PropTypes.string,
         PropTypes.object,
       ]),
+      optional: PropTypes.bool,
     };
 
     /**
@@ -55,6 +56,7 @@ const HOCInput = Component =>
           value: this.props.defaultValue || '',
           rule: this.props.rule,
           asyncRule: this.props.asyncRule,
+          optional: this.props.optional,
         },
       );
     }

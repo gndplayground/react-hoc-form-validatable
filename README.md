@@ -3,6 +3,9 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## What news
+### v0.2.2
+- Add support for optional input.
+
 ### v0.2.0
 - Add support for validate file input.
 - Add support for calculated error message
@@ -42,4 +45,7 @@ The library uses `Higher Order Component` technique and React context to make it
 Before use this library you should have knowledge about Higher Order Component. 
 
 About React context you should understand it if you want to create your own 
-HOC Input Component
+HOC Input Component.
+
+Your Input Component should be controlled component. 
+Meaning the form validate will pass the value to the input. See the definition [here](https://www.sitepoint.com/video-controlled-vs-uncontrolled-components-in-react/)
