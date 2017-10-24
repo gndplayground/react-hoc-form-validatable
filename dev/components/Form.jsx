@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HOCForm from '../../src/HOCForm';
 
 class Form extends React.Component {
@@ -30,12 +31,12 @@ class Form extends React.Component {
 
 
 Form.propTypes = {
-  hasResetButton: React.PropTypes.bool,
-  hasError: React.PropTypes.bool,
-  onSubmit: React.PropTypes.func,
-  reset: React.PropTypes.func,
-  submitted: React.PropTypes.bool,
-  children: React.PropTypes.node,
+  hasResetButton: PropTypes.bool,
+  hasError: PropTypes.bool,
+  onSubmit: PropTypes.func,
+  reset: PropTypes.func,
+  submitted: PropTypes.bool,
+  children: PropTypes.node,
 };
 
 export default HOCForm(Form);

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Input from './Input';
 import HOCForm from '../../src/HOCForm';
 
@@ -52,11 +53,11 @@ class FormDemoBasic extends React.Component {
 
 
 FormDemoBasic.propTypes = {
-  hasError: React.PropTypes.bool,
-  onSubmit: React.PropTypes.func,
-  reset: React.PropTypes.func,
-  submitted: React.PropTypes.bool,
-  children: React.PropTypes.node,
+  hasError: PropTypes.bool,
+  onSubmit: PropTypes.func,
+  reset: PropTypes.func,
+  submitted: PropTypes.bool,
+  children: PropTypes.node,
 };
 
 export default HOCForm(FormDemoBasic);
