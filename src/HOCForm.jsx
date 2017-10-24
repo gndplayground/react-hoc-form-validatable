@@ -146,7 +146,8 @@ const HOCForm = Component =>
      * @param {FileList} files
      * @private
      */
-    _checkInput = (name, value, files) => {
+    _checkInput = (name, value, files, noRepeat) => {
+      console.log(name, value);
       const newInputState = update(this.state.inputs[name], {
         value: { $set: value },
         files: { $set: files },
@@ -158,6 +159,7 @@ const HOCForm = Component =>
         newInputState,
         this.props.rules,
         currentInputsState,
+        noRepeat ? null : this._checkInput,
       );
 
       if (response.check
@@ -243,6 +245,7 @@ const HOCForm = Component =>
             newState.inputs[input],
             rules,
             newState.inputs,
+            this._checkInput,
           );
           if (response.check
               && newState.inputs[input].asyncRule

@@ -7,14 +7,14 @@ import deepClone from 'lodash.clonedeep';
  * @param {Object} allInputs
  * @returns {Boolean} Return false when value is not pass the rule otherwise return true
  */
-export function checkRule(ruleOb, input, params, allInputs) {
+export function checkRule(ruleOb, input, params, allInputs, checkInput) {
   const type = typeof ruleOb.rule;
 
   switch (type) {
 
     case 'function':
 
-      return ruleOb.rule(input.value, params, input, allInputs);
+      return ruleOb.rule(input.value, params, input, allInputs, checkInput);
 
     case 'object':
 
@@ -101,9 +101,10 @@ export function formatMessage(message, params, input, allInputs) {
  * @param {Object} input
  * @param {Object} listRule
  * @param {Object} allInputs
+ * @param {Function} allInputs
  * @returns {{check: Boolean, message: Object}}
  */
-export function validate(input, listRule, allInputs) {
+export function validate(input, listRule, allInputs, checkInput) {
   if (!input.rule || (input.optional && !input.value)) {
     return {
       check: true,
@@ -120,6 +121,7 @@ export function validate(input, listRule, allInputs) {
       input,
       ruleNameAndParams.params,
       allInputs,
+      checkInput,
     );
     response.errorRule = response.check ? '' : rules[i];
     response.message = response.check ?
