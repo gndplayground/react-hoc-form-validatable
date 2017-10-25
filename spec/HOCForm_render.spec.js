@@ -34,59 +34,55 @@ describe('Test render validate form with no async rules', () => {
     };
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
-    FormTest = React.createClass({
-      render() {
-        return (
-          <Form
-            submitCallback={handlerSubmit}
-            validateLang="en"
-            rules={validateRules}
-          >
-            <div>
-              <Input
-                id="foo"
-                label="Choose your user name"
-                errorClassName="error-message"
-                wrapClassName="input-group"
-                type="text"
-                name="userName"
-                rule="notEmpty|minLength,4"
-              />
-              <Input
-                label="Your email"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="email"
-                name="email"
-                rule="notEmpty|isEmail"
-              />
-              <Input
-                label="Your login password"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="password"
-                name="password"
-                rule="notEmpty|minLength,6"
-              />
+    FormTest = () => (
+      <Form
+        submitCallback={handlerSubmit}
+        validateLang="en"
+        rules={validateRules}
+      >
+        <div>
+          <Input
+            id="foo"
+            label="Choose your user name"
+            errorClassName="error-message"
+            wrapClassName="input-group"
+            type="text"
+            name="userName"
+            rule="notEmpty|minLength,4"
+          />
+          <Input
+            label="Your email"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="email"
+            name="email"
+            rule="notEmpty|isEmail"
+          />
+          <Input
+            label="Your login password"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="password"
+            name="password"
+            rule="notEmpty|minLength,6"
+          />
 
-              <Input
-                label="Test"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="test"
-                name="test"
-                rule="notEmpty|testCalculatedMessage,abc"
-              />
-            </div>
+          <Input
+            label="Test"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="test"
+            name="test"
+            rule="notEmpty|testCalculatedMessage,abc"
+          />
+        </div>
 
-            <br />
+        <br />
 
-          </Form>);
-      },
-    });
+      </Form>);
 
     FromTestRender = mount(
       <FormTest />,

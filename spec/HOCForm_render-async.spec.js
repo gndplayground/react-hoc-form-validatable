@@ -42,17 +42,15 @@ describe('Test render validate form with async rules always return true', () => 
       },
 
       asyncTestCalculatedMessage: {
-        rule: (value, params, input, allInputs) => {
-          return cancelAblePromise(new Promise((resolve) => {
-            setTimeout(() => {
-              if (parseInt(input.value, 10) !== 1 || allInputs.email.value !== 'abc@abc.com') {
-                resolve(true);
-              } else {
-                resolve(false);
-              }
-            }, 10);
-          }))
-        },
+        rule: (value, params, input, allInputs) => cancelAblePromise(new Promise((resolve) => {
+          setTimeout(() => {
+            if (parseInt(input.value, 10) !== 1 || allInputs.email.value !== 'abc@abc.com') {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          }, 10);
+        })),
 
         message: {
           error: (value, params, input, allInputs) => ({
@@ -65,62 +63,58 @@ describe('Test render validate form with async rules always return true', () => 
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
 
-    FormTest = React.createClass({
-      render() {
-        return (
-          <Form
-            submitCallback={handlerSubmit}
-            validateLang="en"
-            rules={validateRules}
-          >
-            <div>
-              <Input
-                id="foo"
-                label="Choose your user name"
-                errorClassName="error-message"
-                wrapClassName="input-group"
-                type="text"
-                name="userName"
-                rule="notEmpty|minLength,4"
-                asyncRule="asyncTestTrue,10"
-              />
-              <Input
-                label="Your email"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="email"
-                name="email"
-                rule="notEmpty|isEmail"
-                asyncRule="asyncTestTrue,10"
-              />
-              <Input
-                label="Your login password"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="password"
-                name="password"
-                rule="notEmpty|minLength,6"
-              />
+    FormTest = () => (
+      <Form
+        submitCallback={handlerSubmit}
+        validateLang="en"
+        rules={validateRules}
+      >
+        <div>
+          <Input
+            id="foo"
+            label="Choose your user name"
+            errorClassName="error-message"
+            wrapClassName="input-group"
+            type="text"
+            name="userName"
+            rule="notEmpty|minLength,4"
+            asyncRule="asyncTestTrue,10"
+          />
+          <Input
+            label="Your email"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="email"
+            name="email"
+            rule="notEmpty|isEmail"
+            asyncRule="asyncTestTrue,10"
+          />
+          <Input
+            label="Your login password"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="password"
+            name="password"
+            rule="notEmpty|minLength,6"
+          />
 
-              <Input
-                label="Test"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="test"
-                name="test"
-                rule="notEmpty"
-                asyncRule="asyncTestCalculatedMessage,abc"
-              />
-            </div>
+          <Input
+            label="Test"
+            errorClassName="error-message"
+            inputClassName="input"
+            wrapClassName="input-group"
+            type="test"
+            name="test"
+            rule="notEmpty"
+            asyncRule="asyncTestCalculatedMessage,abc"
+          />
+        </div>
 
-            <br />
+        <br />
 
-          </Form>);
-      },
-    });
+      </Form>);
 
     FromTestRender = mount(
       <FormTest />,

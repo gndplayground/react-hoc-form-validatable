@@ -140,25 +140,57 @@ const HOCForm = Component =>
     };
 
     /**
+     * Form control method check input pass to custom validation
+     * @param {Object} inputStateTrigger - current state of input that trigger method
+     * @param {String} name - name of the input need to set value and validate
+     * @param {*} value value - value of the input need to set value and validate
+     * @param {FileList} files - FileList of the input need to validate
+     * @private
+     */
+    _formControlCheckInput = (inputStateTrigger, name, value, files) => {
+      this._checkInput(name, value, files, true, inputStateTrigger);
+    };
+
+    /**
      * Handle input onchange value
      * @param {String} name
      * @param {*} value
      * @param {FileList} files
+     * @param {Boolean} isTriggerByFormControl
+     * @param {Object} inputStateTrigger
      * @private
      */
-    _checkInput = (name, value, files) => {
+    _checkInput = (name, value, files, isTriggerByFormControl, inputStateTrigger) => {
       const newInputState = update(this.state.inputs[name], {
-        value: { $set: value },
-        files: { $set: files },
+        value: { $set: value || '' },
+        files: { $set: files || null },
       });
 
-      const currentInputsState = cloneDeep(this.state.inputs);
+      const prepareUpdateInputsState = {
+        [name]: { $set: newInputState },
+      };
+
+      if (isTriggerByFormControl) {
+        prepareUpdateInputsState[inputStateTrigger.name] = { $set: inputStateTrigger };
+      }
+
+      const currentInputsState = update(this.state.inputs, prepareUpdateInputsState);
+
 
       const response = validate(
         newInputState,
         this.props.rules,
         currentInputsState,
+        {
+          isControlledValidate: isTriggerByFormControl,
+          checkInput: this._formControlCheckInput,
+        },
       );
+
+      // Remove any promise left when typing too fast
+      if (!response.check && this.onCheckInputPromise[name]) {
+        this.onCheckInputPromise[name].cancel();
+      }
 
       if (response.check
         && newInputState.asyncRule
@@ -230,7 +262,7 @@ const HOCForm = Component =>
      * @returns {{newState: *, inputsAsyncRule: {}}}
      * @private
      */
-    _formSubmitStagePrepare = (state, rules, inputsPromise) => {
+    _formSubmitStagePrepare = (state, rules, inputsPromise, isControlledValidate) => {
       let newState = cloneDeep(state);
       const inputsAsyncRule = {};
       for (const input in newState.inputs) {
@@ -243,6 +275,10 @@ const HOCForm = Component =>
             newState.inputs[input],
             rules,
             newState.inputs,
+            {
+              isControlledValidate,
+              checkInput: this._formControlCheckInput,
+            },
           );
           if (response.check
               && newState.inputs[input].asyncRule
