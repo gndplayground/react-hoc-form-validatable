@@ -15,11 +15,7 @@ describe('Test methods for HOCForm', () => {
 
   beforeEach(() => {
     jasmine.clock().install();
-    MockComponent = React.createClass({
-      render() {
-        return (<div>Fake Component</div>);
-      },
-    });
+    MockComponent = () => (<div>Fake Component</div>);
 
     const cancelAblePromiseDumbTrue = cancelAblePromise(new Promise((resolve) => {
       resolve(true);
@@ -461,11 +457,7 @@ describe('Test methods for HOCForm', () => {
 
 describe('Test render for HOCForm', () => {
   it('Should wrap the mock component at first', () => {
-    const MockComponent = React.createClass({
-      render() {
-        return (<div>Fake Component</div>);
-      },
-    });
+    const MockComponent = () => (<div>Fake Component</div>);
 
     const Wrap = HOCForm(MockComponent);
 

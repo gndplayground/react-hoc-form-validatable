@@ -34,31 +34,27 @@ describe('Test render validate form with async rules always return true', () => 
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
 
-    FormTest = React.createClass({
-      render() {
-        return (
-          <Form
-            submitCallback={handlerSubmit}
-            validateLang="en"
-            rules={validateRules}
-          >
-            <div>
-              <Input
-                optional
-                id="foo"
-                label="Choose your user name"
-                type="text"
-                name="foo"
-                rule="minLength,4"
-                asyncRule="asyncTestFalse,10"
-              />
-            </div>
+    FormTest = () => (
+      <Form
+        submitCallback={handlerSubmit}
+        validateLang="en"
+        rules={validateRules}
+      >
+        <div>
+          <Input
+            optional
+            id="foo"
+            label="Choose your user name"
+            type="text"
+            name="foo"
+            rule="minLength,4"
+            asyncRule="asyncTestFalse,10"
+          />
+        </div>
 
-            <br />
+        <br />
 
-          </Form>);
-      },
-    });
+      </Form>);
 
     FromTestRender = mount(
       <FormTest />,

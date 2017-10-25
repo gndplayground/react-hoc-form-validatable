@@ -29,72 +29,68 @@ describe('Test render custom error message', () => {
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
 
-    FormTest = React.createClass({
-      render() {
-        return (
-          <Form
-            submitCallback={handlerSubmit}
-            validateLang="en"
-            rules={validateRules}
-          >
-            <div>
-              <Input
-                id="foo"
-                label="Choose your user name"
-                errorClassName="error-message"
-                wrapClassName="input-group"
-                type="text"
-                name="userName"
-                rule="notEmpty|minLength,4"
-                customErrorMessages={{
-                  notEmpty: 'notEmpty userName',
-                  minLength: 'minLength {0} userName',
-                }}
-              />
-              <Input
-                label="Your email"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="email"
-                name="email"
-                rule="notEmpty|isEmail"
-                asyncRule="asyncTestFalse,10"
-                customErrorMessages={{
-                  asyncTestFalse: 'custom message {0}',
-                }}
-              />
-              <Input
-                label="Your login password"
-                errorClassName="error-message"
-                inputClassName="input"
-                wrapClassName="input-group"
-                type="password"
-                name="password"
-                rule="notEmpty|minLength,6"
-                asyncRule="asyncTestFalse,10"
-                customErrorMessages={{
-                  asyncTestFalse: {
-                    en: 'custom message en {0}',
-                    vi: 'custom message vi {0}',
-                  },
-                  notEmpty: {
-                    en: 'notEmpty password en',
-                    vi: 'notEmpty password vi',
-                  },
-                  minLength: {
-                    en: 'minLength {0} password en',
-                    vi: 'minLength {0} password vi',
-                  },
-                }}
-              />
-            </div>
+    FormTest = () => (<Form
+      submitCallback={handlerSubmit}
+      validateLang="en"
+      rules={validateRules}
+    >
+      <div>
+        <Input
+          id="foo"
+          label="Choose your user name"
+          errorClassName="error-message"
+          wrapClassName="input-group"
+          type="text"
+          name="userName"
+          rule="notEmpty|minLength,4"
+          customErrorMessages={{
+            notEmpty: 'notEmpty userName',
+            minLength: 'minLength {0} userName',
+          }}
+        />
+        <Input
+          label="Your email"
+          errorClassName="error-message"
+          inputClassName="input"
+          wrapClassName="input-group"
+          type="email"
+          name="email"
+          rule="notEmpty|isEmail"
+          asyncRule="asyncTestFalse,10"
+          customErrorMessages={{
+            asyncTestFalse: 'custom message {0}',
+          }}
+        />
+        <Input
+          label="Your login password"
+          errorClassName="error-message"
+          inputClassName="input"
+          wrapClassName="input-group"
+          type="password"
+          name="password"
+          rule="notEmpty|minLength,6"
+          asyncRule="asyncTestFalse,10"
+          customErrorMessages={{
+            asyncTestFalse: {
+              en: 'custom message en {0}',
+              vi: 'custom message vi {0}',
+            },
+            notEmpty: {
+              en: 'notEmpty password en',
+              vi: 'notEmpty password vi',
+            },
+            minLength: {
+              en: 'minLength {0} password en',
+              vi: 'minLength {0} password vi',
+            },
+          }}
+        />
+      </div>
 
-            <br />
+      <br />
 
-          </Form>);
-      },
-    });
+    </Form>
+    );
 
     FromTestRender = mount(
       <FormTest />,

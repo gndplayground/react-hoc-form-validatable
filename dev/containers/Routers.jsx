@@ -11,7 +11,7 @@ import CustomErrorMessageExample from '../examples/CustomErrorMessageExample';
 import FileExample from '../examples/FileExample';
 import CalculatedErrorMessageExample from '../examples/CalculatedErrorMessageExample';
 import OptionalExample from '../examples/OptionalInput';
-import TestExample from '../examples/Test';
+import FormControlInputExample from '../examples/FormControlInputExample';
 
 const Routers = () => (
   <HashRouter>
@@ -25,7 +25,7 @@ const Routers = () => (
         <li><Link to="/examples/calculated-error-message">Calculated Error Message Example</Link></li>
         <li><Link to="/examples/custom-error-message">Custom Error Message Example</Link></li>
         <li><Link to="/examples/files">Validate file input</Link></li>
-        <li><Link to="/examples/test">Test</Link></li>
+        <li><Link to="/examples/custom-validation-with-form-control">Custom validation with formControl.checkInput</Link></li>
       </ul>
 
       <hr />
@@ -37,7 +37,7 @@ const Routers = () => (
       <Route exact path="/examples/custom-error-message" component={CustomErrorMessageExample} />
       <Route exact path="/examples/files" component={FileExample} />
       <Route exact path="/examples/optional" component={OptionalExample} />
-      <Route exact path="/examples/test" component={TestExample} />
+      <Route exact path="/examples/custom-validation-with-form-control" component={FormControlInputExample} />
     </div>
   </HashRouter>
 );

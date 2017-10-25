@@ -34,37 +34,33 @@ describe('Test render validate form with optional input and no async rules', () 
     };
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
-    FormTest = React.createClass({
-      render() {
-        return (
-          <Form
-            submitCallback={handlerSubmit}
-            validateLang="en"
-            rules={validateRules}
-          >
-            <div>
-              <Input
-                optional
-                id="bar"
-                label="bar"
-                type="text"
-                name="bar"
-                rule="minLength,4"
-              />
-              <Input
-                id="foo"
-                label="foo"
-                type="text"
-                name="foo"
-                rule="notEmpty|minLength,4"
-              />
-            </div>
+    FormTest = () => (
+      <Form
+        submitCallback={handlerSubmit}
+        validateLang="en"
+        rules={validateRules}
+      >
+        <div>
+          <Input
+            optional
+            id="bar"
+            label="bar"
+            type="text"
+            name="bar"
+            rule="minLength,4"
+          />
+          <Input
+            id="foo"
+            label="foo"
+            type="text"
+            name="foo"
+            rule="notEmpty|minLength,4"
+          />
+        </div>
 
-            <br />
+        <br />
 
-          </Form>);
-      },
-    });
+      </Form>);
 
     FromTestRender = mount(
       <FormTest />,
