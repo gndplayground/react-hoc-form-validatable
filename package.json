@@ -1,6 +1,6 @@
 {
   "name": "react-hoc-form-validatable",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "React higher order components for validate form. Can use with Promise",
   "main": "lib/index.js",
   "author": "giang.nguyen.dev@gmail.com",

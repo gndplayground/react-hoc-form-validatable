@@ -71,8 +71,10 @@ const HOCInput = Component =>
      * @private
      */
     _inputOnchange = (e) => {
-      e.persist();
-      this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+      if (e) {
+        e.persist();
+        this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+      }
     };
 
     /**
@@ -81,8 +83,10 @@ const HOCInput = Component =>
      * @private
      */
     _inputOnBlur = (e) => {
-      e.persist();
-      this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+      if (e) {
+        e.persist();
+        this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+      }
     };
 
     /**
