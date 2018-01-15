@@ -13,7 +13,11 @@ describe('Test render validate form with no async rules', () => {
   let FormTest;
   let FromTestRender;
   let handlerSubmit;
+  let onChange;
+  let onBlur;
   beforeEach(() => {
+    onChange = spy();
+    onBlur = spy();
     handlerSubmit = spy();
     const extendDemoRules = {
       testCalculatedMessage: {
@@ -51,6 +55,8 @@ describe('Test render validate form with no async rules', () => {
             rule="notEmpty|minLength,4"
           />
           <Input
+            onBlur={onBlur}
+            onChange={onChange}
             label="Your email"
             errorClassName="error-message"
             inputClassName="input"
@@ -117,6 +123,12 @@ describe('Test render validate form with no async rules', () => {
         errorMessage: '',
       }));
     });
+
+    it('Should call onBlur', () => {
+      const email = FromTestRender.find('input[name="email"]');
+      email.simulate('blur', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
+      expect(onBlur.called).toEqual(true);
+    });
   });
 
   describe('Test input on key up (value changes)', () => {
@@ -164,6 +176,12 @@ describe('Test render validate form with no async rules', () => {
         validated: true,
         errorMessage: '',
       }));
+    });
+
+    it('Should call onChange', () => {
+      const email = FromTestRender.find('input[name="email"]');
+      email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
+      expect(onChange.called).toEqual(true);
     });
   });
 

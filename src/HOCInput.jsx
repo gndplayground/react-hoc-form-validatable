@@ -28,6 +28,8 @@ const HOCInput = Component =>
         PropTypes.object,
       ]),
       optional: PropTypes.bool,
+      onChange: PropTypes.func,
+      onBlur: PropTypes.func,
     };
 
     /**
@@ -72,6 +74,9 @@ const HOCInput = Component =>
      */
     _inputOnchange = (e) => {
       if (e) {
+        if (this.props.onChange) {
+          this.props.onChange(e);
+        }
         e.persist();
         this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
       }
@@ -84,6 +89,9 @@ const HOCInput = Component =>
      */
     _inputOnBlur = (e) => {
       if (e) {
+        if (this.props.onBlur) {
+          this.props.onBlur(e);
+        }
         e.persist();
         this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
       }
