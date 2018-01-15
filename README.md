@@ -3,6 +3,8 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## What news
+### v0.3.2
+* Add support for native callback onChange and onBlur on input.
 ### v0.3.0
 * Remove any promise left when user typing too fast and return check was the error.
 * Remove warning about react 16. (I tested with react 16 and it works great. However, enzyme 3 is rewritten so test failed. So currently dev stick to react 15 and enzyme 2.8.0).
