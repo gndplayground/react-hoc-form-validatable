@@ -3,6 +3,8 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## What news
+### v0.3.3
+* Add support for error callback when submit form. [See](https://github.com/gndplayground/react-hoc-form-validatable/blob/master/docs/3.HOCForm.md).
 ### v0.3.2
 * Add support for native callback onChange and onBlur on input.
 ### v0.3.0

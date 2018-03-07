@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { spy } from 'sinon';
+import { spy, match } from 'sinon';
 import defaultRules from '../src/defaultRules';
 import Form from '../dev/components/Form';
 import Input from '../dev/components/Input';
@@ -15,10 +15,12 @@ describe('Test render validate form with no async rules', () => {
   let handlerSubmit;
   let onChange;
   let onBlur;
+  let errorCallback;
   beforeEach(() => {
     onChange = spy();
     onBlur = spy();
     handlerSubmit = spy();
+    errorCallback = spy();
     const extendDemoRules = {
       testCalculatedMessage: {
         rule: (value, params, input, allInputs) => {
@@ -41,6 +43,7 @@ describe('Test render validate form with no async rules', () => {
     FormTest = () => (
       <Form
         submitCallback={handlerSubmit}
+        errorCallback={errorCallback}
         validateLang="en"
         rules={validateRules}
       >
@@ -186,7 +189,7 @@ describe('Test render validate form with no async rules', () => {
   });
 
   describe('Test form submit', () => {
-    it('Should validted all input and return new props for each input', () => {
+    it('Should validated all input and return new props for each input also return error callback', () => {
       FromTestRender.find('form').simulate('submit');
       expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
@@ -208,6 +211,7 @@ describe('Test render validate form with no async rules', () => {
       }));
 
       expect(handlerSubmit.called).toEqual(false);
+      expect(errorCallback.called).toEqual(true);
     });
 
     it('Should validated all input and return new props for each input has not validated', () => {

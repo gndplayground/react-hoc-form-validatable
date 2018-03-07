@@ -14,11 +14,13 @@ const HOCForm = Component =>
      * @property {Object} validateLang - Language for the error messages
      * @property {Object} rules - Rules object
      * @property {function} submitCallback - Callback when form submit success
+     * @property {function} errorCallback - Callback when form submit with error
      */
     static propTypes = {
       validateLang: PropTypes.string.isRequired,
       rules: PropTypes.object.isRequired,
       submitCallback: PropTypes.func,
+      errorCallback: PropTypes.func,
     };
 
     /**
@@ -338,6 +340,9 @@ const HOCForm = Component =>
       if (doneCheck) {
         if (state.hasError) {
           this._doneSubmit();
+          if (typeof this.props.errorCallback === 'function') {
+            this.props.errorCallback(state.inputs);
+          }
         } else {
           this._submitCallback(cloneDeep(state.inputs), this.props.submitCallback);
         }
