@@ -3,7 +3,7 @@ const ruleObDefault = {
     rule: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     message: {
       error: {
-        en: 'This field must be a valid email address',
+        en: 'This field must be a valid email address.',
         vi: 'Hãy nhập một địa chỉ email hợp lệ vào ô này',
       },
     },
@@ -16,7 +16,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field must be not empty',
+        en: 'This field is mandatory.',
         vi: 'Ô này không đươc để trống',
       },
     },
@@ -29,7 +29,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field length must be at least {0} characters',
+        en: 'The value entered must be at least {0} characters.',
         vi: 'Ô này phải chứa ít nhất {0} ký tự',
       },
     },
@@ -42,7 +42,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field length must not be greater than {0} characters',
+        en: 'The value entered must not be greater than {0} characters.',
         vi: 'Ô này độ dài tối đa {0} ký tự',
       },
     },
@@ -55,7 +55,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field length must be between {0} characters and {1} characters',
+        en: 'The value entered must be between {0} characters and {1} characters.',
         vi: 'Ô này độ dài phải từ {0} ký tự và {1} ký tự',
       },
     },
@@ -66,7 +66,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field must be numeric',
+        en: 'The value entered must be a numeric value.',
         vi: 'Ô này phải là một số',
       },
     },
@@ -77,7 +77,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field must be integer',
+        en: 'The value entered must be an integer.',
         vi: 'Ô này phải là một số nguyên',
       },
     },
@@ -88,7 +88,7 @@ const ruleObDefault = {
 
     message: {
       error: {
-        en: 'This field must be entirely alphabetic characters.',
+        en: 'The value entered must be alphabetic characters only.',
         vi: 'Ô này chỉ được chứa chữ cái',
       },
     },
