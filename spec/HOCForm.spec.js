@@ -128,7 +128,7 @@ describe('Test methods for HOCForm', () => {
               dirty: true,
               error: true,
               errorMessage: {
-                en: 'This field length must be at least 10 characters',
+                en: 'The value entered must be at least 10 characters.',
                 vi: 'Ô này phải chứa ít nhất 10 ký tự',
               },
               errorRule: 'minLength,10',
@@ -256,7 +256,7 @@ describe('Test methods for HOCForm', () => {
               dirty: true,
               error: true,
               errorMessage: {
-                en: 'This field length must be at least 10 characters',
+                en: 'The value entered must be at least 10 characters.',
                 vi: 'Ô này phải chứa ít nhất 10 ký tự',
               },
               errorRule: 'minLength,10',

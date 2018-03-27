@@ -96,7 +96,7 @@ describe('Test render validate form with optional input and no async rules', () 
         validated: true,
         errorMessage:
         {
-          en: 'This field length must be at least 4 characters',
+          en: 'The value entered must be at least 4 characters.',
           vi: 'Ô này phải chứa ít nhất 4 ký tự',
         },
       }));
