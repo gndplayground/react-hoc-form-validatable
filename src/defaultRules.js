@@ -11,7 +11,8 @@ const ruleObDefault = {
 
   notEmpty: {
     rule(value) {
-      return (!(value === null || value === '' || value === undefined));
+      const val = typeof value === 'string' ? value.trim() : value;
+      return !(val === null || val === '' || val === undefined);
     },
 
     message: {
