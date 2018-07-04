@@ -127,7 +127,7 @@ const HOCForm = Component =>
      * @private
      */
     _register = (input, dataInput) => {
-      if (!this.state.submitted && !this._isUnmounted) {
+      if (!this._isUnmounted) {
         this.setState((state) => {
           const hasError = typeof dataInput.error === 'undefined' ? state.hasError : this._checkHasError(dataInput.error, input, state.inputs);
           const inputs = Object.assign(state.inputs, {
