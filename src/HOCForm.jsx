@@ -17,10 +17,14 @@ const HOCForm = Component =>
      * @property {function} errorCallback - Callback when form submit with error
      */
     static propTypes = {
-      validateLang: PropTypes.string.isRequired,
+      validateLang: PropTypes.string,
       rules: PropTypes.object.isRequired,
       submitCallback: PropTypes.func,
       errorCallback: PropTypes.func,
+    };
+
+    static defaultProps = {
+      validateLang: 'en',
     };
 
     /**
