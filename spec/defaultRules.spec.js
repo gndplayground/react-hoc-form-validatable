@@ -1,5 +1,6 @@
 import defaultRules from '../src/defaultRules';
 
+/* global describe it expect*/
 describe('isEmail rule', () => {
   it('Should return true when check "giang.nguyen.dev@gmail.com"', () => {
     expect(defaultRules.isEmail.rule.test('giang.nguyen.dev@gmail.com')).toEqual(true);

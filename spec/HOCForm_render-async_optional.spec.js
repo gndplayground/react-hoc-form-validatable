@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { spy } from 'sinon';
 import defaultRules from '../src/defaultRules';
 import cancelAblePromise from '../src/cancelablePromise';
 import Form from '../dev/components/Form';
@@ -14,10 +13,9 @@ describe('Test render validate form with async rules always return true', () => 
   let handlerSubmit;
 
   beforeEach(() => {
-    jest.useRealTimers();
     const extendDemoRules = {
       asyncTestFalse: {
-        rule: (value, params) => cancelAblePromise(new Promise((resolve) => {
+        rule: () => cancelAblePromise(new Promise((resolve) => {
           setTimeout(() => {
             resolve(false);
           }, 10);
@@ -65,7 +63,7 @@ describe('Test render validate form with async rules always return true', () => 
     it('Should skip asycn rule and other rules when input is optional', () => {
       const fooInput = FromTestRender.find('input[name="foo"]');
       fooInput.simulate('change', { target: { value: '', name: 'foo' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         error: false,
         dirty: true,
@@ -73,7 +71,7 @@ describe('Test render validate form with async rules always return true', () => 
         pending: false,
       }));
       FromTestRender.find('form').simulate('submit');
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         error: false,
         dirty: true,
@@ -85,7 +83,7 @@ describe('Test render validate form with async rules always return true', () => 
     it('Should validate input when not empty', (done) => {
       const userName = FromTestRender.find('input[name="foo"]');
       userName.simulate('change', { target: { value: '123', name: 'foo' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '123',
         error: true,
         dirty: true,
@@ -99,13 +97,12 @@ describe('Test render validate form with async rules always return true', () => 
       }));
       userName.simulate('change', { target: { value: '1245', name: 'foo' } });
 
-      jest.runOnlyPendingTimers();
-
       FromTestRender.find('form').simulate('submit');
 
       setTimeout(() => {
         try {
-          expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+          FromTestRender.update();
+          expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
             value: '1245',
             error: true,
             dirty: true,
@@ -114,11 +111,9 @@ describe('Test render validate form with async rules always return true', () => 
           }));
           done();
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       }, 100);
-
-      jest.runOnlyPendingTimers();
     });
   });
 });

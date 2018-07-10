@@ -5,8 +5,8 @@ import cancelAblePromise from '../src/cancelablePromise';
 import defaultRules from '../src/defaultRules';
 import HOCForm from '../src/HOCForm';
 
-/* global describe it expect jasmine beforeEach afterEach */
-
+/* global describe it expect jasmine beforeEach afterEach jest*/
+console.log(jasmine.objectContaining);
 describe('Test methods for HOCForm', () => {
   let wrapper,
     WrapperComponent,
@@ -14,7 +14,6 @@ describe('Test methods for HOCForm', () => {
     instance;
 
   beforeEach(() => {
-    jasmine.clock().install();
     MockComponent = () => (<div>Fake Component</div>);
 
     const cancelAblePromiseDumbTrue = cancelAblePromise(new Promise((resolve) => {
@@ -59,7 +58,7 @@ describe('Test methods for HOCForm', () => {
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+
   });
 
   describe('Test _checkHasError method', () => {
@@ -94,13 +93,6 @@ describe('Test methods for HOCForm', () => {
       instance._register('name', { error: true });
       instance._register('name', { error: false });
       expect(instance.state.inputs.name).toEqual({ error: false });
-    });
-
-    it('Should not update input state when form is submitted', () => {
-      instance._register('name', { error: true });
-      instance.state.submitted = true;
-      instance._register('name', { error: false });
-      expect(instance.state.inputs.name).toEqual({ error: true });
     });
   });
 
@@ -310,8 +302,6 @@ describe('Test methods for HOCForm', () => {
       instance._checkInput('nameNN', '12345');
 
 
-      jasmine.clock().tick(10);
-
       expect(instance.state.inputs.nameNN.error).toEqual(false);
 
       instance.setState({
@@ -324,8 +314,6 @@ describe('Test methods for HOCForm', () => {
         },
       });
       instance._checkInput('nameMM', '12345');
-
-      jasmine.clock().tick(10);
 
       expect(instance.state.inputs.nameMM.error).toEqual(false);
     });

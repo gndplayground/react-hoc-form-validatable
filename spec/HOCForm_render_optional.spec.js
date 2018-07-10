@@ -70,13 +70,13 @@ describe('Test render validate form with optional input and no async rules', () 
   describe('Test form with optional input', () => {
     it('Should bar input is valid when submit form with empty value', () => {
       FromTestRender.find('form').simulate('submit');
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: false,
         dirty: true,
         validated: true,
       }));
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
@@ -89,7 +89,7 @@ describe('Test render validate form with optional input and no async rules', () 
     it('Should change invalid value and empty input cause optional input is valid', () => {
       const barInput = FromTestRender.find('input[name="bar"]');
       barInput.simulate('change', { target: { value: '12', name: 'bar' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '12',
         error: true,
         dirty: true,
@@ -101,7 +101,7 @@ describe('Test render validate form with optional input and no async rules', () 
         },
       }));
       barInput.simulate('change', { target: { value: '', name: 'bar' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         error: false,
         dirty: true,

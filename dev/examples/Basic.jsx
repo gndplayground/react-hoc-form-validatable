@@ -11,7 +11,6 @@ const Basic = () => (
   <div>
     <h2>Basic example</h2>
     <FormDemoBasic
-      validateLang="en"
       submitCallback={handlerSubmit}
       rules={defaultRules}
     /></div>);
