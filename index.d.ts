@@ -2,7 +2,7 @@ import * as React from "react";
 
 
 export interface FormValidateProps {
-    validateLang: string;
+    validateLang?: string;
     submitCallback?: (a: any, b: any) => void;
     errorCallback?: () => void;
     rules: any;

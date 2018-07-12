@@ -107,11 +107,7 @@ describe('Test render validate form with no async rules', () => {
         error: true,
         dirty: true,
         validated: true,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
     });
 
@@ -143,11 +139,7 @@ describe('Test render validate form with no async rules', () => {
         error: true,
         dirty: true,
         validated: true,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
     });
 

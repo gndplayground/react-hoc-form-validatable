@@ -89,11 +89,7 @@ describe('Test render validate form with async rules always return true', () => 
         dirty: true,
         validated: true,
         submitted: false,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
       userName.simulate('change', { target: { value: '1245', name: 'foo' } });
 

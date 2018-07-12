@@ -119,10 +119,7 @@ describe('Test methods for HOCForm', () => {
               value: '12345',
               dirty: true,
               error: true,
-              errorMessage: {
-                en: 'The value entered must be at least 10 characters.',
-                vi: 'Ô này phải chứa ít nhất 10 ký tự',
-              },
+              errorMessage: 'The value entered must be at least 10 characters.',
               errorRule: 'minLength,10',
               pending: false,
             },
@@ -247,10 +244,7 @@ describe('Test methods for HOCForm', () => {
               value: '12345',
               dirty: true,
               error: true,
-              errorMessage: {
-                en: 'The value entered must be at least 10 characters.',
-                vi: 'Ô này phải chứa ít nhất 10 ký tự',
-              },
+              errorMessage: 'The value entered must be at least 10 characters.',
               errorRule: 'minLength,10',
               pending: false,
               rule: 'minLength,10',

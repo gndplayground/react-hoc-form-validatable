@@ -151,10 +151,7 @@ describe('Check validate function', () => {
     expect(response).toEqual({
       check: false,
       errorRule: 'minLength,10',
-      message: {
-        en: 'The value entered must be at least 10 characters.',
-        vi: 'Ô này phải chứa ít nhất 10 ký tự',
-      },
+      message: 'The value entered must be at least 10 characters.',
     });
   });
 
@@ -164,10 +161,7 @@ describe('Check validate function', () => {
     expect(response).toEqual({
       check: false,
       errorRule: 'minLength,10',
-      message: {
-        en: 'The value entered must be at least 10 characters.',
-        vi: 'Ô này phải chứa ít nhất 10 ký tự',
-      },
+      message: 'The value entered must be at least 10 characters.',
     });
   });
 

@@ -94,11 +94,7 @@ describe('Test render validate form with optional input and no async rules', () 
         error: true,
         dirty: true,
         validated: true,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
       barInput.simulate('change', { target: { value: '', name: 'bar' } });
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
