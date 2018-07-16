@@ -1,9 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import defaultRules from '../src/defaultRules';
-import cancelAblePromise from '../src/cancelablePromise';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
 /* global describe it expect jasmine beforeEach afterEach */
 
@@ -15,11 +14,11 @@ describe('Test render validate form with async rules always return true', () => 
   beforeEach(() => {
     const extendDemoRules = {
       asyncTestFalse: {
-        rule: () => cancelAblePromise(new Promise((resolve) => {
+        rule: () => new Promise((resolve) => {
           setTimeout(() => {
             resolve(false);
           }, 10);
-        })),
+        }),
 
         message: {
           error: {

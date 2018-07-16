@@ -2,9 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { spy } from 'sinon';
 import defaultRules from '../src/defaultRules';
-import cancelAblePromise from '../src/cancelablePromise';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
 /* global describe it expect jasmine beforeEach afterEach */
 describe('Test render with error lang', () => {
@@ -27,9 +26,9 @@ describe('Test render with error lang', () => {
         },
       },
       asyncTestFalse: {
-        rule: (value, params) => cancelAblePromise(new Promise((resolve) => {
+        rule: (value, params) => new Promise((resolve) => {
           setTimeout(() => { resolve(false); }, parseInt(params[0], 10));
-        })),
+        }),
 
         message: {
           error: {

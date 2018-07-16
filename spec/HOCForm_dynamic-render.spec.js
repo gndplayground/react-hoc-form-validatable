@@ -3,8 +3,8 @@ import { mount } from 'enzyme';
 import { spy } from 'sinon';
 import update from 'immutability-helper';
 import defaultRules from '../src/defaultRules';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
 /* global describe it expect jasmine beforeEach afterEach */
 

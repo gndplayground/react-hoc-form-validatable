@@ -2,32 +2,32 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { spy } from 'sinon';
 import defaultRules from '../src/defaultRules';
-import cancelAblePromise from '../src/cancelablePromise';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
 /* global describe it expect jasmine beforeEach afterEach */
 
 describe('Test render validate form with async rules always return true', () => {
-  let FormTest;
   let FromTestRender;
   let handlerSubmit;
-  const cancel = cancelAblePromise(new Promise((resolve) => {
+  let instance;
+  const cancel = new Promise((resolve) => {
     setTimeout(() => {
       resolve(true);
     }, 10);
-  }));
+  });
 
-  let spyCancelAblePromise;
 
+  let spyCancelPromises;
 
   afterEach(() => {
-    cancel.cancel.restore();
+    instance._clearPromises.restore();
   });
 
   beforeEach(() => {
     handlerSubmit = spy();
-    spyCancelAblePromise = spy(cancel, 'cancel');
+
+
     const extendDemoRules = {
       asyncTestTrue: {
         rule: () => cancel,
@@ -41,7 +41,7 @@ describe('Test render validate form with async rules always return true', () => 
       },
 
       asyncTestCalculatedMessage: {
-        rule: (value, params, input, allInputs) => cancelAblePromise(new Promise((resolve) => {
+        rule: (value, params, input, allInputs) => new Promise((resolve) => {
           setTimeout(() => {
             if (parseInt(input.value, 10) !== 1 || allInputs.email.value !== 'abc@abc.com') {
               resolve(true);
@@ -49,7 +49,7 @@ describe('Test render validate form with async rules always return true', () => 
               resolve(false);
             }
           }, 10);
-        })),
+        }),
 
         message: {
           error: (value, params, input, allInputs) => ({
@@ -62,7 +62,7 @@ describe('Test render validate form with async rules always return true', () => 
 
     const validateRules = Object.assign({}, defaultRules, extendDemoRules);
 
-    FormTest = () => (
+    FromTestRender = mount(
       <Form
         submitCallback={handlerSubmit}
         validateLang="en"
@@ -113,14 +113,34 @@ describe('Test render validate form with async rules always return true', () => 
 
         <br />
 
-      </Form>);
+      </Form>,
+      );
+    instance = FromTestRender.instance();
 
-    FromTestRender = mount(
-      <FormTest />,
-    );
+    spyCancelPromises = spy(instance, '_clearPromises');
   });
 
   describe('Test input on key up (value changes)', () => {
+    it('Should cancel the async rules when unmount the form', () => {
+      const userName = FromTestRender.find('input[name="userName"]');
+      const email = FromTestRender.find('input[name="email"]');
+      userName.simulate('change', { target: { value: '12345', name: 'userName' } });
+      email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
+
+      expect(instance.onCheckInputPromise.userName).toBeDefined();
+
+      expect(instance.onCheckInputPromise.email).toBeDefined();
+
+      const spyUserName = spy(instance.onCheckInputPromise.userName, 'cancel');
+      const spyEmail = spy(instance.onCheckInputPromise.email, 'cancel');
+
+      FromTestRender.unmount();
+
+      expect(spyCancelPromises.called).toEqual(true);
+      expect(spyUserName.called).toEqual(true);
+      expect(spyEmail.called).toEqual(true);
+    });
+
     it('Should validated sync rule and return new props with pending state when input has no error', () => {
       const userName = FromTestRender.find('input[name="userName"]');
       userName.simulate('change', { target: { value: '12345', name: 'userName' } });
@@ -178,17 +198,6 @@ describe('Test render validate form with async rules always return true', () => 
         }
       }, 50);
     });
-
-    it('Should cancel the async rules when unmount the form', () => {
-      const userName = FromTestRender.find('input[name="userName"]');
-      const email = FromTestRender.find('input[name="email"]');
-      userName.simulate('change', { target: { value: '12345', name: 'userName' } });
-      email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
-
-      FromTestRender.unmount();
-
-      expect(spyCancelAblePromise.callCount).toEqual(2);
-    });
   });
 
   describe('Test form submit', () => {
@@ -197,13 +206,21 @@ describe('Test render validate form with async rules always return true', () => 
       const email = FromTestRender.find('input[name="email"]');
       userName.simulate('change', { target: { value: '12345', name: 'userName' } });
       email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
+
+      expect(instance.onCheckInputPromise.userName).toBeDefined();
+
+      expect(instance.onCheckInputPromise.email).toBeDefined();
+
+      const spyUserName = spy(instance.onCheckInputPromise.userName, 'cancel');
+      const spyEmail = spy(instance.onCheckInputPromise.email, 'cancel');
+
       FromTestRender.find('form').simulate('submit');
 
       FromTestRender.unmount();
 
-
-      expect(spyCancelAblePromise.callCount).toEqual(4);
-      expect(handlerSubmit.called).toEqual(false);
+      expect(spyCancelPromises.called).toEqual(true);
+      expect(spyUserName.called).toEqual(true);
+      expect(spyEmail.called).toEqual(true);
     });
 
     it('Should validated all sync rule input, set pending state for async rule input and return new props for each input', () => {
