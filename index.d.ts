@@ -5,6 +5,7 @@ export interface FormValidateProps {
     validateLang?: string;
     submitCallback?: (a: any, b: any) => void;
     errorCallback?: () => void;
+    errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
 }
 

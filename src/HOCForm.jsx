@@ -22,6 +22,7 @@ const HOCForm = Component =>
       rules: PropTypes.object.isRequired,
       submitCallback: PropTypes.func,
       errorCallback: PropTypes.func,
+      errorAsyncRuleCallback: PropTypes.func,
     };
 
     static defaultProps = {
@@ -268,7 +269,13 @@ const HOCForm = Component =>
             pending: false,
           });
         }).catch((error) => {
-          if (!error.isCanceled) console.error(error);
+          if (!error.isCanceled) {
+            if (this.props.errorAsyncRuleCallback) {
+              this.props.errorAsyncRuleCallback(error);
+            } else {
+              console.error(error);
+            }
+          }
         });
       } else {
         this._register(name, {
@@ -446,7 +453,11 @@ const HOCForm = Component =>
             if (err.isCanceled) {
               return;
             }
-            console.error(err);
+            if (this.props.errorAsyncRuleCallback) {
+              this.props.errorAsyncRuleCallback(err);
+            } else {
+              console.error(err);
+            }
           });
         }
       } else {
