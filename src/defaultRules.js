@@ -2,10 +2,7 @@ const ruleObDefault = {
   isEmail: {
     rule: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     message: {
-      error: {
-        en: 'This field must be a valid email address.',
-        vi: 'Hãy nhập một địa chỉ email hợp lệ vào ô này',
-      },
+      error: 'This field must be a valid email address.',
     },
   },
 
@@ -16,10 +13,7 @@ const ruleObDefault = {
     },
 
     message: {
-      error: {
-        en: 'This field is mandatory.',
-        vi: 'Ô này không đươc để trống',
-      },
+      error: 'This field is mandatory.',
     },
   },
 
@@ -29,10 +23,8 @@ const ruleObDefault = {
     },
 
     message: {
-      error: {
-        en: 'The value entered must be at least {0} characters.',
-        vi: 'Ô này phải chứa ít nhất {0} ký tự',
-      },
+      error: 'The value entered must be at least {0} characters.'
+      ,
     },
   },
 
@@ -42,10 +34,7 @@ const ruleObDefault = {
     },
 
     message: {
-      error: {
-        en: 'The value entered must not be greater than {0} characters.',
-        vi: 'Ô này độ dài tối đa {0} ký tự',
-      },
+      error: 'The value entered must not be greater than {0} characters.',
     },
   },
 
@@ -55,10 +44,7 @@ const ruleObDefault = {
     },
 
     message: {
-      error: {
-        en: 'The value entered must be between {0} characters and {1} characters.',
-        vi: 'Ô này độ dài phải từ {0} ký tự và {1} ký tự',
-      },
+      error: 'The value entered must be between {0} characters and {1} characters.',
     },
   },
 
@@ -66,10 +52,7 @@ const ruleObDefault = {
     rule: /^[-+]?(?:\d*[.])?\d+$/,
 
     message: {
-      error: {
-        en: 'The value entered must be a numeric value.',
-        vi: 'Ô này phải là một số',
-      },
+      error: 'The value entered must be a numeric value.',
     },
   },
 
@@ -77,10 +60,7 @@ const ruleObDefault = {
     rule: value => !isNaN(value) && (value % 1 === 0),
 
     message: {
-      error: {
-        en: 'The value entered must be an integer.',
-        vi: 'Ô này phải là một số nguyên',
-      },
+      error: 'The value entered must be an integer.',
     },
   },
 
@@ -88,10 +68,7 @@ const ruleObDefault = {
     rule: /^[A-Z]+$/i,
 
     message: {
-      error: {
-        en: 'The value entered must be alphabetic characters only.',
-        vi: 'Ô này chỉ được chứa chữ cái',
-      },
+      error: 'The value entered must be alphabetic characters only.',
     },
   },
 };

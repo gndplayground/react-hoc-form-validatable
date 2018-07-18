@@ -7,7 +7,7 @@ const config = {
   entry: {
     app: [
       'babel-polyfill',
-      'react-hot-loader/patch',
+      // 'react-hot-loader/patch',
       './dev/index',
     ],
   },

@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { spy, match } from 'sinon';
+import { spy } from 'sinon';
 import defaultRules from '../src/defaultRules';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
 
 /* global describe it expect jasmine beforeEach afterEach */
@@ -102,23 +102,19 @@ describe('Test render validate form with no async rules', () => {
     it('Should validated and return new props when input has error', () => {
       const userName = FromTestRender.find('input[name="userName"]');
       userName.simulate('blur', { target: { value: '12', name: 'userName' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '12',
         error: true,
         dirty: true,
         validated: true,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
     });
 
     it('Should validated and return new props when input has no error', () => {
       const email = FromTestRender.find('input[name="email"]');
       email.simulate('blur', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         value: 'giang.nguyen.dev@gmail.com',
         error: false,
         dirty: true,
@@ -138,16 +134,12 @@ describe('Test render validate form with no async rules', () => {
     it('Should validated and return new props when input has error', () => {
       const userName = FromTestRender.find('input[name="userName"]');
       userName.simulate('change', { target: { value: '12', name: 'userName' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '12',
         error: true,
         dirty: true,
         validated: true,
-        errorMessage:
-        {
-          en: 'The value entered must be at least 4 characters.',
-          vi: 'Ô này phải chứa ít nhất 4 ký tự',
-        },
+        errorMessage: 'The value entered must be at least 4 characters.',
       }));
     });
 
@@ -156,7 +148,7 @@ describe('Test render validate form with no async rules', () => {
       email.simulate('change', { target: { value: 'abc@abc.com', name: 'email' } });
       const test = FromTestRender.find('input[name="test"]');
       test.simulate('change', { target: { value: '1', name: 'test' } });
-      expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[3].props).toEqual(jasmine.objectContaining({
         value: '1',
         error: true,
         dirty: true,
@@ -172,7 +164,7 @@ describe('Test render validate form with no async rules', () => {
     it('Should validated and return new props when input has no error', () => {
       const email = FromTestRender.find('input[name="email"]');
       email.simulate('change', { target: { value: 'giang.nguyen.dev@gmail.com', name: 'email' } });
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         value: 'giang.nguyen.dev@gmail.com',
         error: false,
         dirty: true,
@@ -191,19 +183,19 @@ describe('Test render validate form with no async rules', () => {
   describe('Test form submit', () => {
     it('Should validated all input and return new props for each input also return error callback', () => {
       FromTestRender.find('form').simulate('submit');
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
         validated: true,
       }));
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
         validated: true,
       }));
-      expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
@@ -221,19 +213,19 @@ describe('Test render validate form with no async rules', () => {
 
       FromTestRender.find('form').simulate('submit');
 
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
         validated: true,
       }));
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: false,
         dirty: true,
         validated: true,
       }));
-      expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
         dirty: true,
@@ -256,28 +248,28 @@ describe('Test render validate form with no async rules', () => {
 
       FromTestRender.find('form').simulate('submit');
 
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: true,
         error: false,
         dirty: true,
         validated: true,
       }));
 
-      expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: true,
         error: false,
         dirty: true,
         validated: true,
       }));
 
-      expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         submitted: true,
         error: false,
         dirty: true,
         validated: true,
       }));
 
-      expect(FromTestRender.find('Input').nodes[3].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[3].props).toEqual(jasmine.objectContaining({
         submitted: true,
         error: false,
         dirty: true,

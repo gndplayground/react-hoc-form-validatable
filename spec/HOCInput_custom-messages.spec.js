@@ -2,10 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { spy } from 'sinon';
 import defaultRules from '../src/defaultRules';
-import cancelAblePromise from '../src/cancelablePromise';
-import Form from '../dev/components/Form';
-import Input from '../dev/components/Input';
+import Form from './components/Form';
+import Input from './components/Input';
 
+/* global describe it expect jasmine beforeEach afterEach */
 describe('Test render custom error message', () => {
   let FormTest;
   let FromTestRender;
@@ -14,9 +14,9 @@ describe('Test render custom error message', () => {
     handlerSubmit = spy();
     const extendDemoRules = {
       asyncTestFalse: {
-        rule: (value, params) => cancelAblePromise(new Promise((resolve) => {
+        rule: (value, params) => new Promise((resolve) => {
           setTimeout(() => { resolve(false); }, parseInt(params[0], 10));
-        })),
+        }),
 
         message: {
           error: {
@@ -101,7 +101,7 @@ describe('Test render custom error message', () => {
     it('Should pass prop custom error message type string', () => {
       const userNameInput = FromTestRender.find('input[name="userName"]');
       userNameInput.simulate('change', { target: { value: '', name: 'userName' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         errorMessage: 'notEmpty userName',
       }));
@@ -110,7 +110,7 @@ describe('Test render custom error message', () => {
     it('Should pass prop custom error message type object', () => {
       const passwordInput = FromTestRender.find('input[name="password"]');
       passwordInput.simulate('change', { target: { value: '', name: 'password' } });
-      expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         value: '',
         errorMessage: {
           en: 'notEmpty password en',
@@ -122,7 +122,7 @@ describe('Test render custom error message', () => {
     it('Should pass prop custom error message type string with format', () => {
       const userNameInput = FromTestRender.find('input[name="userName"]');
       userNameInput.simulate('change', { target: { value: '123', name: 'userName' } });
-      expect(FromTestRender.find('Input').nodes[0].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '123',
         errorMessage: 'minLength 4 userName',
       }));
@@ -131,7 +131,7 @@ describe('Test render custom error message', () => {
     it('Should pass prop custom error message type object with format', () => {
       const passwordInput = FromTestRender.find('input[name="password"]');
       passwordInput.simulate('change', { target: { value: '1234', name: 'password' } });
-      expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+      expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         value: '1234',
         errorMessage: {
           en: 'minLength 6 password en',
@@ -148,7 +148,8 @@ describe('Test render custom error message', () => {
 
       setTimeout(() => {
         try {
-          expect(FromTestRender.find('Input').nodes[1].props).toEqual(jasmine.objectContaining({
+          FromTestRender.update();
+          expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
             value: 'giang.nguyen.dev@gmail.com',
             errorMessage: 'custom message 10',
           }));
@@ -165,7 +166,8 @@ describe('Test render custom error message', () => {
 
       setTimeout(() => {
         try {
-          expect(FromTestRender.find('Input').nodes[2].props).toEqual(jasmine.objectContaining({
+          FromTestRender.update();
+          expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
             value: '123456',
             errorMessage: {
               en: 'custom message en 10',

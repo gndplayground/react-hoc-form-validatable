@@ -1,11 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { spy } from 'sinon';
-import cancelAblePromise from '../src/cancelablePromise';
 import defaultRules from '../src/defaultRules';
 import HOCForm from '../src/HOCForm';
 
-/* global describe it expect jasmine beforeEach afterEach */
+/* global describe it expect jasmine beforeEach afterEach jest*/
 
 describe('Test methods for HOCForm', () => {
   let wrapper,
@@ -14,20 +13,19 @@ describe('Test methods for HOCForm', () => {
     instance;
 
   beforeEach(() => {
-    jasmine.clock().install();
     MockComponent = () => (<div>Fake Component</div>);
 
-    const cancelAblePromiseDumbTrue = cancelAblePromise(new Promise((resolve) => {
+    const promiseDumbTrue = new Promise((resolve) => {
       resolve(true);
-    }));
+    });
 
-    const cancelAblePromiseDumbFalse = cancelAblePromise(new Promise((resolve) => {
+    const promiseDumbFalse = new Promise((resolve) => {
       resolve(false);
-    }));
+    });
 
     const asyncRuleDumb = {
       asyncDumbTrue: {
-        rule: () => cancelAblePromiseDumbTrue,
+        rule: () => promiseDumbTrue,
         message: {
           error: {
             en: 'dumb en',
@@ -36,7 +34,7 @@ describe('Test methods for HOCForm', () => {
         },
       },
       asyncDumbFalse: {
-        rule: () => cancelAblePromiseDumbFalse,
+        rule: () => promiseDumbFalse,
         message: {
           error: {
             en: 'dumb en',
@@ -59,7 +57,7 @@ describe('Test methods for HOCForm', () => {
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+
   });
 
   describe('Test _checkHasError method', () => {
@@ -95,13 +93,6 @@ describe('Test methods for HOCForm', () => {
       instance._register('name', { error: false });
       expect(instance.state.inputs.name).toEqual({ error: false });
     });
-
-    it('Should not update input state when form is submitted', () => {
-      instance._register('name', { error: true });
-      instance.state.submitted = true;
-      instance._register('name', { error: false });
-      expect(instance.state.inputs.name).toEqual({ error: true });
-    });
   });
 
   describe('Test _formSubmitStagePrepare method', () => {
@@ -127,10 +118,7 @@ describe('Test methods for HOCForm', () => {
               value: '12345',
               dirty: true,
               error: true,
-              errorMessage: {
-                en: 'The value entered must be at least 10 characters.',
-                vi: 'Ô này phải chứa ít nhất 10 ký tự',
-              },
+              errorMessage: 'The value entered must be at least 10 characters.',
               errorRule: 'minLength,10',
               pending: false,
             },
@@ -141,15 +129,15 @@ describe('Test methods for HOCForm', () => {
     });
 
     it('Should return new state of the inputs also cancel the promise that input hold', () => {
-      const cancelAblePromiseDumb = cancelAblePromise(new Promise((resolve) => {
+      const promiseDumb = new Promise((resolve) => {
         setTimeout(() => {
           resolve(true);
         }, 5000);
-      }));
+      });
 
       const asyncRule = {
         asyncTest: {
-          rule: () => cancelAblePromiseDumb,
+          rule: () => promiseDumb,
         },
       };
 
@@ -200,7 +188,18 @@ describe('Test methods for HOCForm', () => {
         inputsAsyncRule: {
           name: {
             name: 'asyncTest',
-            rule: cancelAblePromiseDumb,
+            promises: [
+              promiseDumb,
+            ],
+            rules: [
+              'asyncTest',
+            ],
+            ruleList: [
+              {
+                params: [],
+                ruleName: 'asyncTest',
+              },
+            ],
             value: '12345',
           },
         },
@@ -208,15 +207,15 @@ describe('Test methods for HOCForm', () => {
     });
 
     it('Should return new state of the inputs with out asyncRule also cancel the promise that input hold', () => {
-      const cancelAblePromiseDumb = cancelAblePromise(new Promise((resolve) => {
+      const promiseDumb = new Promise((resolve) => {
         setTimeout(() => {
           resolve(true);
         }, 5000);
-      }));
+      });
 
       const asyncRule = {
         asyncTest: {
-          rule: () => cancelAblePromiseDumb,
+          rule: () => promiseDumb,
         },
       };
 
@@ -255,10 +254,7 @@ describe('Test methods for HOCForm', () => {
               value: '12345',
               dirty: true,
               error: true,
-              errorMessage: {
-                en: 'The value entered must be at least 10 characters.',
-                vi: 'Ô này phải chứa ít nhất 10 ký tự',
-              },
+              errorMessage: 'The value entered must be at least 10 characters.',
               errorRule: 'minLength,10',
               pending: false,
               rule: 'minLength,10',
@@ -310,8 +306,6 @@ describe('Test methods for HOCForm', () => {
       instance._checkInput('nameNN', '12345');
 
 
-      jasmine.clock().tick(10);
-
       expect(instance.state.inputs.nameNN.error).toEqual(false);
 
       instance.setState({
@@ -324,8 +318,6 @@ describe('Test methods for HOCForm', () => {
         },
       });
       instance._checkInput('nameMM', '12345');
-
-      jasmine.clock().tick(10);
 
       expect(instance.state.inputs.nameMM.error).toEqual(false);
     });

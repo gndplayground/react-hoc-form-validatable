@@ -63,6 +63,30 @@ const HOCInput = Component =>
       );
     }
 
+    componentWillReceiveProps(nextProps) {
+      if (
+          nextProps.defaultValue !== this.props.defaultValue ||
+          nextProps.rule !== this.props.rule ||
+          nextProps.asyncRule !== this.props.asyncRule ||
+          nextProps.optional !== this.props.optional
+      ) {
+        const input = this.context.validateInputs[this.props.name];
+        this.context.validateRegister(
+          this.props.name,
+          {
+            name: this.props.name,
+            defaultValue: nextProps.defaultValue,
+            value: this.props.defaultValue === input.value &&
+                nextProps.defaultValue !== this.props.defaultValue ?
+                nextProps.defaultValue : input.value,
+            rule: nextProps.rule,
+            asyncRule: nextProps.asyncRule,
+            optional: nextProps.optional,
+          },
+        );
+      }
+    }
+
     componentWillUnmount() {
       this.context.validateUnRegister(this.props.name);
     }

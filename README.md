@@ -3,20 +3,17 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## What news
+### v0.4.0
+- `validateLang` now is optional props in HOCForm
+- `cancelablePromise` fix unhandled reject promise. `cancelablePromise` now only use internally. Async rules no need to use `cancelablePromise`.
+- Now support multiple async rules.
+- Added `errorAsyncRuleCallback` to handle errors in async rules. 
+- Partial support typescript (need improve more)
+
 ### v0.3.3
 * Add support for error callback when submit form. [See](https://github.com/gndplayground/react-hoc-form-validatable/blob/master/docs/3.HOCForm.md).
 ### v0.3.2
 * Add support for native callback onChange and onBlur on input.
-### v0.3.0
-* Remove any promise left when user typing too fast and return check was the error.
-* Remove warning about react 16. (I tested with react 16 and it works great. However, enzyme 3 is rewritten so test failed. So currently dev stick to react 15 and enzyme 2.8.0).
-* Add new control form method for custom validation method. [see](https://github.com/gndplayground/react-hoc-form-validatable/blob/master/docs/1.ValidationRules.md#--formcontrolcheckinput-function)
-### v0.2.2
-- Add support for optional input.
-
-### v0.2.0
-- Add support for validate file input.
-- Add support for calculated error message
 
 ## Intro
 
