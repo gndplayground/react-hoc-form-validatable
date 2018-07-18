@@ -7,21 +7,13 @@ import Input from './components/Input';
 
 /* global describe it expect jasmine beforeEach afterEach */
 
+let shouldThrowError = false;
+
 describe('Test render validate form with async rules always return true', () => {
   let FromTestRender;
   let handlerSubmit;
   let errorAsyncRuleCallback;
   let instance;
-  let shouldThrowError = false;
-  const cancel = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldThrowError) {
-        reject('error');
-      }
-      resolve(true);
-    }, 10);
-  });
-
 
   let spyCancelPromises;
 
@@ -36,7 +28,15 @@ describe('Test render validate form with async rules always return true', () => 
 
     const extendDemoRules = {
       asyncTestTrue: {
-        rule: () => cancel,
+        rule: () => new Promise((resolve, reject) => {
+          setTimeout(() => {
+            console.log(shouldThrowError);
+            if (shouldThrowError) {
+              reject('error');
+            }
+            resolve(true);
+          }, 10);
+        }),
 
         message: {
           error: {
@@ -205,6 +205,25 @@ describe('Test render validate form with async rules always return true', () => 
         }
       }, 50);
     });
+
+    it('Should callback error async rules success when change input', (done) => {
+      shouldThrowError = true;
+      const userName = FromTestRender.find('input[name="userName"]');
+      userName.simulate('change', { target: { value: '12345', name: 'userName' } });
+      try {
+        setTimeout(() => {
+          try {
+            FromTestRender.update();
+            expect(errorAsyncRuleCallback.called).toEqual(true);
+            done();
+          } catch (e) {
+            console.log(e);
+          }
+        }, 1000);
+      } catch (e) {
+        console.log(e);
+      }
+    });
   });
 
   describe('Test form submit', () => {
@@ -310,25 +329,6 @@ describe('Test render validate form with async rules always return true', () => 
                 vi: 'vi 1 abc 1 abc@abc.com',
               },
             }));
-            done();
-          } catch (e) {
-            console.log(e);
-          }
-        }, 100);
-      } catch (e) {
-        console.log(e);
-      }
-    });
-
-    it('Should callback error async rules success when change input', (done) => {
-      shouldThrowError = true;
-      const userName = FromTestRender.find('input[name="userName"]');
-      userName.simulate('change', { target: { value: '12345', name: 'userName' } });
-      try {
-        setTimeout(() => {
-          try {
-            FromTestRender.update();
-            expect(errorAsyncRuleCallback.called).toEqual(true);
             done();
           } catch (e) {
             console.log(e);
