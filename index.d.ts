@@ -45,7 +45,50 @@ export interface InputValidateChildProps {
     onChangeValue: () => void;
 }
 
-declare const defaultRules: any;
+export interface InputStates {
+    name: string,
+    asyncRule: string,
+    defaultValue: any,
+    dirty: boolean,
+    error: boolean,
+    errorMessage: string
+    errorRule: string,
+    files: FileList,
+    pending: boolean,
+    rule: string
+    validated: string
+    value: any
+}
+
+export interface FormControl {
+    isControlledValidate: boolean
+    checkInput: (input: InputStates, name: string, value: any, files: FileList | null) => void
+}
+
+export type ValidationRuleFunction = (value: any, params: string[], input: InputStates, allInputs: {
+    [k: string]: InputStates
+}, formControl: FormControl) => boolean
+
+export type ValidationMessageFunction = (value: any, params: string[], input: InputStates, allInputs: {
+    [k: string]: InputStates
+}) => string
+
+export interface ValidationRuleDefine<Rule = RegExp | ValidationRuleFunction | Promise<boolean>, ErrorMessageType = string | ValidationMessageFunction> {
+    rule: Rule;
+    message: {
+        error: ErrorMessageType
+    }
+}
+
+declare const defaultRules: {
+    isEmail: ValidationRuleDefine<RegExp, string>;
+    notEmpty: ValidationRuleDefine<ValidationRuleFunction, string>;
+    minLength: ValidationRuleDefine<ValidationRuleFunction, string>;
+    maxLength: ValidationRuleDefine<ValidationRuleFunction, string>;
+    isNumeric: ValidationRuleDefine<RegExp, string>;
+    isInt: ValidationRuleDefine<ValidationRuleFunction, string>;
+    isAlpha: ValidationRuleDefine<RegExp, string>;
+};
 
 declare function HOCForm<P>(
     Component: React.ComponentType<P>
@@ -56,5 +99,3 @@ declare function HOCInput<P>(
 ): React.ComponentType<P & InputValidateProps>;
 
 export { HOCForm, HOCInput, defaultRules };
-
-
