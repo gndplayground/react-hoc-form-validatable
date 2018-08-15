@@ -5,7 +5,7 @@ export interface FormValidateProps {
     validateLang?: string;
     submitCallback?: (inputs: {
         [k: string]: InputStates
-    }, done: (reset: boolean) => void) => void;
+    }, done: (reset?: boolean) => void) => void;
     errorCallback?: () => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
