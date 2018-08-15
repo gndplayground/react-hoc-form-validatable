@@ -3,7 +3,9 @@ import * as React from "react";
 
 export interface FormValidateProps {
     validateLang?: string;
-    submitCallback?: (a: any, b: any) => void;
+    submitCallback?: (inputs: {
+        [k: string]: InputStates
+    }, done: (reset: boolean) => void) => void;
     errorCallback?: () => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
@@ -98,4 +100,4 @@ declare function HOCInput<P>(
     Component: React.ComponentType
 ): React.ComponentType<P & InputValidateProps>;
 
-export { HOCForm, HOCInput, defaultRules };
+export {HOCForm, HOCInput, defaultRules};

@@ -55,7 +55,7 @@ const HOCInput = Component =>
         {
           name: this.props.name,
           defaultValue: this.props.defaultValue,
-          value: this.props.defaultValue || '',
+          value: this.props.defaultValue || this.props.defaultValue === 0 ? this.props.defaultValue : '',
           rule: this.props.rule,
           asyncRule: this.props.asyncRule,
           optional: this.props.optional,

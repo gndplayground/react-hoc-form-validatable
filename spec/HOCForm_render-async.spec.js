@@ -30,7 +30,6 @@ describe('Test render validate form with async rules always return true', () => 
       asyncTestTrue: {
         rule: () => new Promise((resolve, reject) => {
           setTimeout(() => {
-            console.log(shouldThrowError);
             if (shouldThrowError) {
               reject('error');
             }
