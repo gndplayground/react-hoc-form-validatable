@@ -4,11 +4,9 @@ import update from 'immutability-helper';
 import cloneDeep from 'lodash.clonedeep';
 import { validate, getRuleNameAndParams, formatMessage } from './validateHelpers';
 import cancelablePromise from './cancelablePromise';
+import FormContext from './context';
 
-
-const HOCForm = Component =>
-
-  class HOCFormValidateAble extends React.Component {
+const HOCForm = Component => class HOCFormValidateAble extends React.Component {
     /**
      * Component prop types
      * @type {Object}
@@ -28,39 +26,6 @@ const HOCForm = Component =>
     static defaultProps = {
       validateLang: 'en',
     };
-
-    /**
-     * Component context types
-     * @type {Object}
-     * @property {String} validateLang - Language for the error messages
-     * @property {Function} validateInputOnChange - Handler event change input value
-     * @property {Object} validateInputs - State of the inputs in the form
-     * @property {Function} validateRegister - Register the input and change state of the input
-     * @property {Boolean} validateSubmitted - The form is submitting
-     */
-    static childContextTypes = {
-      validateLang: PropTypes.string.isRequired,
-      validateInputOnChange: PropTypes.func.isRequired,
-      validateInputs: PropTypes.object,
-      validateRegister: PropTypes.func.isRequired,
-      validateUnRegister: PropTypes.func.isRequired,
-      validateSubmitted: PropTypes.bool,
-    };
-
-    /**
-     * Component map contexts
-     * @returns {Object}
-     */
-    getChildContext() {
-      return {
-        validateLang: this.props.validateLang,
-        validateInputOnChange: this._checkInput,
-        validateInputs: this.state.inputs,
-        validateRegister: this._register,
-        validateUnRegister: this._unRegister,
-        validateSubmitted: this.state.submitted,
-      };
-    }
 
     /**
      * Constructor
@@ -176,7 +141,10 @@ const HOCForm = Component =>
      * @private
      */
     _checkInput = (name, value, files, isTriggerByFormControl, inputStateTrigger) => {
-      const newInputState = update(this.state.inputs[name], {
+      const { inputs } = this.state;
+      const { rules, errorAsyncRuleCallback } = this.props;
+
+      const newInputState = update(inputs[name], {
         value: { $set: value || '' },
         files: { $set: files || null },
       });
@@ -189,12 +157,12 @@ const HOCForm = Component =>
         prepareUpdateInputsState[inputStateTrigger.name] = { $set: inputStateTrigger };
       }
 
-      const currentInputsState = update(this.state.inputs, prepareUpdateInputsState);
+      const currentInputsState = update(inputs, prepareUpdateInputsState);
 
 
       const response = validate(
         newInputState,
-        this.props.rules,
+        rules,
         currentInputsState,
         {
           isControlledValidate: isTriggerByFormControl,
@@ -222,19 +190,19 @@ const HOCForm = Component =>
           errorMessage: response.message,
         });
 
-        const rules = this.state.inputs[name].asyncRule.split('|');
+        const inputRules = inputs[name].asyncRule.split('|');
 
         const promises = [];
         const ruleList = [];
 
-        for (let i = 0; i < rules.length; i += 1) {
-          const ruleNameAndParams = getRuleNameAndParams(rules[i]);
+        for (let i = 0; i < inputRules.length; i += 1) {
+          const ruleNameAndParams = getRuleNameAndParams(inputRules[i]);
           ruleList.push(ruleNameAndParams);
-          promises.push(this.props.rules[ruleNameAndParams.ruleName].rule(
-              value,
-              ruleNameAndParams.params,
-              newInputState,
-              currentInputsState,
+          promises.push(rules[ruleNameAndParams.ruleName].rule(
+            value,
+            ruleNameAndParams.params,
+            newInputState,
+            currentInputsState,
           ));
         }
 
@@ -259,19 +227,19 @@ const HOCForm = Component =>
             files,
             dirty: true,
             error,
-            errorRule: error ? rules[errorIn] : '',
+            errorRule: error ? inputRules[errorIn] : '',
             errorMessage: !error ? '' : formatMessage(
-                this.props.rules[ruleList[errorIn].ruleName].message.error,
-                ruleList[errorIn].params,
-                newInputState,
-                currentInputsState,
+              rules[ruleList[errorIn].ruleName].message.error,
+              ruleList[errorIn].params,
+              newInputState,
+              currentInputsState,
             ),
             pending: false,
           });
         }).catch((error) => {
           if (!error.isCanceled) {
-            if (this.props.errorAsyncRuleCallback) {
-              this.props.errorAsyncRuleCallback(error);
+            if (errorAsyncRuleCallback) {
+              errorAsyncRuleCallback(error);
             } else {
               console.error(error);
             }
@@ -296,6 +264,7 @@ const HOCForm = Component =>
      * @param {Object} state
      * @param {Object} rules
      * @param {Object} inputsPromise
+     * @param {Boolean} isControlledValidate
      * @returns {{newState: *, inputsAsyncRule: {}}}
      * @private
      */
@@ -320,9 +289,9 @@ const HOCForm = Component =>
           if (response.check
               && newState.inputs[input].asyncRule
               && (
-                  !newState.inputs[input].optional
+                !newState.inputs[input].optional
                   || (newState.inputs[input] && newState.inputs[input].value)
-                )
+              )
           ) {
             const rulesAsync = newState.inputs[input].asyncRule.split('|');
 
@@ -334,15 +303,15 @@ const HOCForm = Component =>
               const ruleNameAndParams = getRuleNameAndParams(rulesAsync[i]);
               ruleList.push(ruleNameAndParams);
               promies.push(rules[ruleNameAndParams.ruleName].rule(
-                  newState.inputs[input].value,
-                  ruleNameAndParams.params,
-                  newState.inputs[input],
-                  newState.inputs,
+                newState.inputs[input].value,
+                ruleNameAndParams.params,
+                newState.inputs[input],
+                newState.inputs,
               ));
             }
 
-            if (this.onCheckInputPromise[name]) {
-              this.onCheckInputPromise[name].cancel();
+            if (this.onCheckInputPromise[input]) {
+              this.onCheckInputPromise[input].cancel();
             }
 
             inputsAsyncRule[input] = {
@@ -383,6 +352,7 @@ const HOCForm = Component =>
      */
     _formSubmitSumUp = (state) => {
       let doneCheck = true;
+      const { submitCallback, errorCallback } = this.props;
       for (const input in state.inputs) {
         doneCheck = !state.inputs[input].pending;
         if (!doneCheck) break;
@@ -390,11 +360,11 @@ const HOCForm = Component =>
       if (doneCheck) {
         if (state.hasError) {
           this._doneSubmit();
-          if (typeof this.props.errorCallback === 'function') {
-            this.props.errorCallback(state.inputs);
+          if (typeof errorCallback === 'function') {
+            errorCallback(state.inputs);
           }
         } else {
-          this._submitCallback(cloneDeep(state.inputs), this.props.submitCallback);
+          this._submitCallback(cloneDeep(state.inputs), submitCallback);
         }
       }
     };
@@ -406,7 +376,8 @@ const HOCForm = Component =>
      * @private
      */
     _formSubmitStageHandle = (inputsAsyncRule, stateWhenHandle) => {
-      /* istanbul ignore if  else*/
+      const { rules, errorAsyncRuleCallback } = this.props;
+      /* istanbul ignore if  else */
       if (Object.keys(inputsAsyncRule).length > 0) {
         for (const input in inputsAsyncRule) {
           Promise.all(inputsAsyncRule[input].promises).then((result) => {
@@ -432,29 +403,28 @@ const HOCForm = Component =>
                         ? inputsAsyncRule[input].rules[errorIn].ruleName
                         : '',
                       errorMessage: error
-                          ? formatMessage(
-                              this.props.rules[inputsAsyncRule[input].ruleList[errorIn].ruleName]
-                                  .message.error,
-                              inputsAsyncRule[input].ruleList[errorIn].params,
-                              state.inputs[input],
-                              state.inputs,
-                          )
-                          : '',
+                        ? formatMessage(
+                          rules[inputsAsyncRule[input].ruleList[errorIn].ruleName]
+                            .message.error,
+                          inputsAsyncRule[input].ruleList[errorIn].params,
+                          state.inputs[input],
+                          state.inputs,
+                        )
+                        : '',
                     },
                   },
                 },
               }),
               () => {
                 this._formSubmitSumUp(this.state);
-              },
-            );
+              });
             }
           }).catch((err) => {
             if (err.isCanceled) {
               return;
             }
-            if (this.props.errorAsyncRuleCallback) {
-              this.props.errorAsyncRuleCallback(err);
+            if (errorAsyncRuleCallback) {
+              errorAsyncRuleCallback(err);
             } else {
               console.error(err);
             }
@@ -472,16 +442,16 @@ const HOCForm = Component =>
      */
     _formSubmit = (event) => {
       event.preventDefault();
+      const { rules } = this.props;
       if (!this._isUnmounted) {
         this.setState({
           submitted: true,
         }, () => {
           const prepare = this._formSubmitStagePrepare(
-            this.state, this.props.rules,
+            this.state, rules,
             this.onCheckInputPromise,
           );
-          const newState = prepare.newState;
-          const inputsAsyncRule = prepare.inputsAsyncRule;
+          const { newState, inputsAsyncRule } = prepare;
           this.setState(newState, () => {
             this._formSubmitStageHandle(inputsAsyncRule, this.state);
           });
@@ -534,7 +504,8 @@ const HOCForm = Component =>
      * @private
      */
     _reset = () => {
-      if (!this.state.submitted && !this._isUnmounted) {
+      const { submitted } = this.state;
+      if (!submitted && !this._isUnmounted) {
         this._clearPromises();
         const newState = cloneDeep(this.state);
         newState.hasError = false;
@@ -566,24 +537,38 @@ const HOCForm = Component =>
               files: {
                 $set: undefined,
               },
-            }));
+            }),
+          );
         }
         this.setState(newState);
       }
     };
 
     render() {
+      const { validateLang } = this.props;
+      const { inputs, submitted, hasError } = this.state;
       return (
-        <Component
-          {...this.props}
-          hasError={this.state.hasError}
-          submitted={this.state.submitted}
-          onSubmit={this._formSubmit}
-          reset={this._reset}
-        />
+        <FormContext.Provider
+          value={{
+            validateLang,
+            validateInputOnChange: this._checkInput,
+            validateInputs: inputs,
+            validateRegister: this._register,
+            validateUnRegister: this._unRegister,
+            validateSubmitted: submitted,
+          }}
+        >
+          <Component
+            {...this.props}
+            hasError={hasError}
+            submitted={submitted}
+            onSubmit={this._formSubmit}
+            reset={this._reset}
+          />
+        </FormContext.Provider>
       );
     }
-  };
+};
 
 
 export default HOCForm;

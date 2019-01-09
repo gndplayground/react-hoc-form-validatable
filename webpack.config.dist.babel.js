@@ -15,7 +15,7 @@ const reactDOMExternal = {
 };
 
 module.exports = {
-
+  mode: 'production',
   entry: {
     cancelablePromise: './src/cancelablePromise.js',
     defaultRules: './src/defaultRules.js',

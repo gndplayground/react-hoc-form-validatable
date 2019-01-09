@@ -448,7 +448,7 @@ describe('Test methods for HOCForm', () => {
 
 
 describe('Test render for HOCForm', () => {
-  it('Should wrap the mock component at first', () => {
+  it('Should wrap the mock component and render it once', () => {
     const MockComponent = () => (<div>Fake Component</div>);
 
     const Wrap = HOCForm(MockComponent);
@@ -459,7 +459,6 @@ describe('Test render for HOCForm', () => {
         rules={defaultRules}
       />,
     );
-
-    expect(wrapper.first().is(MockComponent)).toBeTruthy();
+    expect(wrapper.find(MockComponent).getElements()).toHaveLength(1);
   });
 });

@@ -57,7 +57,7 @@ const ruleObDefault = {
   },
 
   isInt: {
-    rule: value => !isNaN(value) && (value % 1 === 0),
+    rule: value => !Number.isNaN(value) && (value % 1 === 0),
 
     message: {
       error: 'The value entered must be an integer.',
