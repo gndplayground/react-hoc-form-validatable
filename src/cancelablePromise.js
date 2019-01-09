@@ -9,13 +9,13 @@ const cancelablePromise = (promise) => {
         resolve(val);
       }
     })
-    .catch((error) => {
-      if (hasCanceled_) {
-        reject({ isCanceled: true });
-      } else {
-        reject(error);
-      }
-    });
+      .catch((error) => {
+        if (hasCanceled_) {
+          reject({ isCanceled: true });
+        } else {
+          reject(error);
+        }
+      });
   });
 
   return {

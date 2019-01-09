@@ -32,6 +32,13 @@
     }],
     "react/require-default-props": 0,
     "guard-for-in": 0,
-    "no-useless-escape": 0
+    "no-useless-escape": 0,
+    "prefer-destructuring": ["error", {
+      "array": false,
+      "object": true
+    }, {
+      "enforceForRenamedProperties": false
+    }],
+    "prefer-promise-reject-errors": "off"
   }
 }

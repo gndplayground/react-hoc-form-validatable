@@ -3,6 +3,10 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## What news
+### v0.5.0
+- Remove babel-cli as dep
+- Use new context react api. So from 0.5.0 will require react > 16.3.0
+
 ### v0.4.0
 - `validateLang` now is optional props in HOCForm
 - `cancelablePromise` fix unhandled reject promise. `cancelablePromise` now only use internally. Async rules no need to use `cancelablePromise`.

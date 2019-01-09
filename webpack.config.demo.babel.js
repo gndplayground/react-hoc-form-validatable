@@ -4,9 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const config = {
+  mode: 'production',
   entry: {
     app: [
-      'babel-polyfill',
       './dev/index',
     ],
   },
@@ -22,7 +22,7 @@ const config = {
       { test: /\.js|jsx$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
         test: /(\.css)$/,
-        use: ['style-loader', 'css-loader?sourceMap&modules=true&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:8]', 'postcss-loader'],
+        use: ['style-loader', 'css-loader?sourceMap&modules=true&localIdentName=[name]__[local]___[hash:base64:8]', 'postcss-loader'],
       },
     ],
   },
@@ -41,19 +41,19 @@ const config = {
     new CleanWebpackPlugin(['./demo'], {
       root: process.cwd(),
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false,
-        drop_console: false,
-      },
-      mangle: {
-        except: ['$'],
-        screw_ie8: true,
-      },
-      sourceMap: true,
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   beautify: false,
+    //   comments: false,
+    //   compress: {
+    //     warnings: false,
+    //     drop_console: false,
+    //   },
+    //   mangle: {
+    //     except: ['$'],
+    //     screw_ie8: true,
+    //   },
+    //   sourceMap: true,
+    // }),
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './index.html',

@@ -12,7 +12,6 @@ export function checkRule(ruleOb, input, params, allInputs, formControl) {
   const type = typeof ruleOb.rule;
 
   switch (type) {
-
     case 'function':
 
       return ruleOb.rule(input.value, params, input, allInputs, formControl);
@@ -125,9 +124,9 @@ export function validate(input, listRule, allInputs, formControl) {
       formControl,
     );
     response.errorRule = response.check ? '' : rules[i];
-    response.message = response.check ?
-      '' :
-      formatMessage(
+    response.message = response.check
+      ? ''
+      : formatMessage(
         listRule[ruleNameAndParams.ruleName].message.error,
         ruleNameAndParams.params,
         input,

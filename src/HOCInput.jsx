@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatMessage, getRuleNameAndParams } from './validateHelpers';
-
+import FormContext from './context';
 
 /**
  * Higher order component that wrap the input and pass necessary props
  * @param Component
  * @constructor
  */
-const HOCInput = Component =>
-  class HOCInputValidateAble extends React.Component {
-    /**
+const HOCInput = Component => class HOCInputValidateAble extends React.Component {
+  /**
      * Component prop types
      * @type {object}
      * @property {string} name - Name of the input
@@ -18,6 +17,9 @@ const HOCInput = Component =>
      * @property {string} asyncRule - Async validation rules of the input
      * @property {*} defaultValue - Default value of the input
      */
+
+    static contextType = FormContext;
+
     static propTypes = {
       name: PropTypes.string.isRequired,
       rule: PropTypes.string,
@@ -33,52 +35,46 @@ const HOCInput = Component =>
     };
 
     /**
-     * Component access contexts
-     * @type {object}
-     * @property {function} validateRegister - Handle Register or update state of the input to form
-     */
-    static contextTypes = {
-      validateLang: PropTypes.string.isRequired,
-      validateInputOnChange: PropTypes.func.isRequired,
-      validateInputs: PropTypes.object,
-      validateRegister: PropTypes.func.isRequired,
-      validateSubmitted: PropTypes.bool.isRequired,
-      validateUnRegister: PropTypes.func.isRequired,
-    };
-
-    /**
      * React life cycle
      */
     componentWillMount() {
-      this.context.validateRegister(
-        this.props.name,
+      const { validateRegister } = this.context;
+      const {
+        name, defaultValue, rule, asyncRule, optional,
+      } = this.props;
+      validateRegister(
+        name,
         {
-          name: this.props.name,
-          defaultValue: this.props.defaultValue,
-          value: this.props.defaultValue || this.props.defaultValue === 0 ? this.props.defaultValue : '',
-          rule: this.props.rule,
-          asyncRule: this.props.asyncRule,
-          optional: this.props.optional,
+          name,
+          defaultValue,
+          value: defaultValue || defaultValue === 0 ? defaultValue : '',
+          rule,
+          asyncRule,
+          optional,
         },
       );
     }
 
     componentWillReceiveProps(nextProps) {
+      const {
+        defaultValue, rule, asyncRule, optional, name,
+      } = this.props;
+      const { validateRegister, validateInputs } = this.context;
       if (
-          nextProps.defaultValue !== this.props.defaultValue ||
-          nextProps.rule !== this.props.rule ||
-          nextProps.asyncRule !== this.props.asyncRule ||
-          nextProps.optional !== this.props.optional
+        nextProps.defaultValue !== defaultValue
+          || nextProps.rule !== rule
+          || nextProps.asyncRule !== asyncRule
+          || nextProps.optional !== optional
       ) {
-        const input = this.context.validateInputs[this.props.name];
-        this.context.validateRegister(
-          this.props.name,
+        const input = validateInputs[name];
+        validateRegister(
+          name,
           {
-            name: this.props.name,
+            name,
             defaultValue: nextProps.defaultValue,
-            value: this.props.defaultValue === input.value &&
-                nextProps.defaultValue !== this.props.defaultValue ?
-                nextProps.defaultValue : input.value,
+            value: defaultValue === input.value
+                && nextProps.defaultValue !== defaultValue
+              ? nextProps.defaultValue : input.value,
             rule: nextProps.rule,
             asyncRule: nextProps.asyncRule,
             optional: nextProps.optional,
@@ -88,7 +84,9 @@ const HOCInput = Component =>
     }
 
     componentWillUnmount() {
-      this.context.validateUnRegister(this.props.name);
+      const { validateUnRegister } = this.context;
+      const { name } = this.props;
+      validateUnRegister(name);
     }
 
     /**
@@ -97,12 +95,14 @@ const HOCInput = Component =>
      * @private
      */
     _inputOnchange = (e) => {
+      const { validateInputOnChange } = this.context;
+      const { onChange } = this.props;
       if (e) {
-        if (this.props.onChange) {
-          this.props.onChange(e);
+        if (onChange) {
+          onChange(e);
         }
         e.persist();
-        this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+        validateInputOnChange(e.target.name, e.target.value, e.target.files);
       }
     };
 
@@ -112,12 +112,14 @@ const HOCInput = Component =>
      * @private
      */
     _inputOnBlur = (e) => {
+      const { validateInputOnChange } = this.context;
+      const { onBlur } = this.props;
       if (e) {
-        if (this.props.onBlur) {
-          this.props.onBlur(e);
+        if (onBlur) {
+          onBlur(e);
         }
         e.persist();
-        this.context.validateInputOnChange(e.target.name, e.target.value, e.target.files);
+        validateInputOnChange(e.target.name, e.target.value, e.target.files);
       }
     };
 
@@ -134,11 +136,11 @@ const HOCInput = Component =>
         const errorRuleAndParam = getRuleNameAndParams(input.errorRule);
         if (input.error && listCustomMessage && listCustomMessage[errorRuleAndParam.ruleName]) {
           return formatMessage(
-             listCustomMessage[errorRuleAndParam.ruleName],
-             errorRuleAndParam.params,
-             input,
-             allInputs,
-           );
+            listCustomMessage[errorRuleAndParam.ruleName],
+            errorRuleAndParam.params,
+            input,
+            allInputs,
+          );
         }
       }
       return input.errorMessage;
@@ -149,31 +151,35 @@ const HOCInput = Component =>
      * @returns {ReactElement}
      */
     render() {
-      const input = this.context.validateInputs[this.props.name];
+      const { validateInputs, validateSubmitted, validateLang } = this.context;
+      const { name, customErrorMessages, defaultValue } = this.props;
+      const input = validateInputs[name];
       return (
-        input ?
-          <Component
-            {...this.props}
-            lang={this.context.validateLang}
-            submitted={this.context.validateSubmitted}
-            validated={input.validated}
-            value={input.value}
-            files={input.files}
-            dirty={input.dirty}
-            error={input.error}
-            pending={input.pending}
-            errorMessage={
-              this._getMessage(input, this.props.customErrorMessages, this.context.validateInputs)
+        input
+          ? (
+            <Component
+              {...this.props}
+              lang={validateLang}
+              submitted={validateSubmitted}
+              validated={input.validated}
+              value={input.value}
+              files={input.files}
+              dirty={input.dirty}
+              error={input.error}
+              pending={input.pending}
+              errorMessage={
+              this._getMessage(input, customErrorMessages, validateInputs)
             }
-            defaultValue={this.props.defaultValue}
-            name={this.props.name}
-            onBlur={this._inputOnBlur}
-            onChange={this._inputOnchange}
-          /> : <span />
+              defaultValue={defaultValue}
+              name={name}
+              onBlur={this._inputOnBlur}
+              onChange={this._inputOnchange}
+            />
+          ) : <span />
 
       );
     }
-  };
+};
 
 
 export default HOCInput;

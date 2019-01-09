@@ -1,11 +1,13 @@
 import * as React from "react";
 
-
 export interface FormValidateProps {
     validateLang?: string;
-    submitCallback?: (inputs: {
-        [k: string]: InputStates
-    }, done: (reset?: boolean) => void) => void;
+    submitCallback?: (
+        inputs: {
+            [k: string]: InputStates;
+        },
+        done: (reset?: boolean) => void
+    ) => void;
     errorCallback?: () => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
@@ -48,38 +50,57 @@ export interface InputValidateChildProps {
 }
 
 export interface InputStates {
-    name: string,
-    asyncRule: string,
-    defaultValue: any,
-    dirty: boolean,
-    error: boolean,
-    errorMessage: string
-    errorRule: string,
-    files: FileList,
-    pending: boolean,
-    rule: string
-    validated: string
-    value: any
+    name: string;
+    asyncRule: string;
+    defaultValue: any;
+    dirty: boolean;
+    error: boolean;
+    errorMessage: string;
+    errorRule: string;
+    files: FileList;
+    pending: boolean;
+    rule: string;
+    validated: string;
+    value: any;
 }
 
 export interface FormControl {
-    isControlledValidate: boolean
-    checkInput: (input: InputStates, name: string, value: any, files: FileList | null) => void
+    isControlledValidate: boolean;
+    checkInput: (
+        input: InputStates,
+        name: string,
+        value: any,
+        files: FileList | null
+    ) => void;
 }
 
-export type ValidationRuleFunction = (value: any, params: string[], input: InputStates, allInputs: {
-    [k: string]: InputStates
-}, formControl: FormControl) => boolean
+export type ValidationRuleFunction = (
+    value: any,
+    params: string[],
+    input: InputStates,
+    allInputs: {
+        [k: string]: InputStates;
+    },
+    formControl: FormControl
+) => boolean;
 
-export type ValidationMessageFunction = (value: any, params: string[], input: InputStates, allInputs: {
-    [k: string]: InputStates
-}) => string
+export type ValidationMessageFunction = (
+    value: any,
+    params: string[],
+    input: InputStates,
+    allInputs: {
+        [k: string]: InputStates;
+    }
+) => string;
 
-export interface ValidationRuleDefine<Rule = RegExp | ValidationRuleFunction | Promise<boolean>, ErrorMessageType = string | ValidationMessageFunction> {
+export interface ValidationRuleDefine<
+    Rule = RegExp | ValidationRuleFunction | Promise<boolean>,
+    ErrorMessageType = string | ValidationMessageFunction
+    > {
     rule: Rule;
     message: {
-        error: ErrorMessageType
-    }
+        error: ErrorMessageType;
+    };
 }
 
 declare const defaultRules: {
@@ -100,4 +121,15 @@ declare function HOCInput<P>(
     Component: React.ComponentType
 ): React.ComponentType<P & InputValidateProps>;
 
-export {HOCForm, HOCInput, defaultRules};
+export const FormContext: React.Context<{
+    validateLang: string;
+    validateInputOnChange: (name: string, value: any, files: FileList) => void;
+    validateInputs: {
+        [key: string]: InputStates;
+    };
+    validateRegister: (input: string, dataInput: Partial<InputStates>) => void;
+    validateUnRegister: (input: string) => void;
+    validateSubmitted: boolean;
+}>;
+
+export { HOCForm, HOCInput, defaultRules };
