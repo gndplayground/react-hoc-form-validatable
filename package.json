@@ -1,6 +1,6 @@
 {
   "name": "react-hoc-form-validatable",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "React higher order components for validate form. Can use with Promise",
   "main": "lib/index.js",
   "author": "giang.nguyen.dev@gmail.com",
@@ -27,7 +27,7 @@
     "react-dom": "^16.3.0"
   },
   "dependencies": {
-    "immutability-helper": "^2.3.0",
+    "immutability-helper": "^3.0.0",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
