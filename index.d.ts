@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 export interface FormValidateProps {
     validateLang?: string;
@@ -6,7 +6,7 @@ export interface FormValidateProps {
         inputs: {
             [k: string]: InputStates;
         },
-        done: (reset?: boolean) => void
+        done: (reset?: boolean) => void,
     ) => void;
     errorCallback?: () => void;
     errorAsyncRuleCallback?: (error: Error) => void;
@@ -18,6 +18,7 @@ export interface FormValidateChildProps {
     submitted: true;
     onSubmit: () => void;
     reset: () => void;
+    children?: any;
 }
 
 export interface InputValidateProps {
@@ -70,7 +71,7 @@ export interface FormControl {
         input: InputStates,
         name: string,
         value: any,
-        files: FileList | null
+        files: FileList | null,
     ) => void;
 }
 
@@ -81,7 +82,7 @@ export type ValidationRuleFunction = (
     allInputs: {
         [k: string]: InputStates;
     },
-    formControl: FormControl
+    formControl: FormControl,
 ) => boolean;
 
 export type ValidationMessageFunction = (
@@ -90,7 +91,7 @@ export type ValidationMessageFunction = (
     input: InputStates,
     allInputs: {
         [k: string]: InputStates;
-    }
+    },
 ) => string;
 
 export interface ValidationRuleDefine<
@@ -113,12 +114,12 @@ declare const defaultRules: {
     isAlpha: ValidationRuleDefine<RegExp, string>;
 };
 
-declare function HOCForm<P>(
-    Component: React.ComponentType<P>
+declare function HOCForm<P = {}>(
+    Component: React.ComponentType<Omit<P, FormValidateProps>>,
 ): React.ComponentType<P & FormValidateProps>;
 
-declare function HOCInput<P>(
-    Component: React.ComponentType
+declare function HOCInput<P = {}>(
+    Component: React.ComponentType<Omit<P, InputValidateProps>>,
 ): React.ComponentType<P & InputValidateProps>;
 
 export const FormContext: React.Context<{
@@ -132,4 +133,4 @@ export const FormContext: React.Context<{
     validateSubmitted: boolean;
 }>;
 
-export { HOCForm, HOCInput, defaultRules };
+export {HOCForm, HOCInput, defaultRules};
