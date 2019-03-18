@@ -124,7 +124,7 @@ declare function HOCInput<P = {}>(
 
 export const FormContext: React.Context<{
     validateLang: string;
-    validateInputOnChange: (name: string, value: any, files: FileList) => void;
+    validateInputOnChange: (name: string, value: any, files: FileList | undefined) => void;
     validateInputs: {
         [key: string]: InputStates;
     };
