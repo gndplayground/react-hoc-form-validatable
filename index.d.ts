@@ -1,13 +1,15 @@
 import * as React from 'react';
 
+export type SubmitCallback = (
+    inputs: {
+        [k: string]: InputStates;
+    },
+    done: (reset?: boolean) => void,
+) => void;
+
 export interface FormValidateProps {
     validateLang?: string;
-    submitCallback?: (
-        inputs: {
-            [k: string]: InputStates;
-        },
-        done: (reset?: boolean) => void,
-    ) => void;
+    submitCallback?: SubmitCallback;
     errorCallback?: () => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
