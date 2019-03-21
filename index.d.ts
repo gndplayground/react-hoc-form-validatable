@@ -26,6 +26,7 @@ export interface FormValidateChildProps {
 export interface InputValidateProps {
     name: string;
     defaultValue?: any;
+    optional?: boolean;
     rule?: string;
     asyncRule?: string;
     customErrorMessages?: {
