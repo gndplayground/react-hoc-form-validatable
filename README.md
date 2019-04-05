@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/gndplayground/react-hoc-form-validatable/badge.svg?branch=master)](https://coveralls.io/github/gndplayground/react-hoc-form-validatable?branch=master)
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
-## What important news
+## Most important news
 ### v0.5.0
 - Remove babel-cli as dep
 - Use new context react api. So from 0.5.0 will require react > 16.3.0
