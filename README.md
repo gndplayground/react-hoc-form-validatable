@@ -3,6 +3,9 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## Most important news
+### v0.5.6
+- Filter unwanted props to HOCInput children
+
 ### v0.5.0
 - Remove babel-cli as dep
 - Use new context react api. So from 0.5.0 will require react > 16.3.0
