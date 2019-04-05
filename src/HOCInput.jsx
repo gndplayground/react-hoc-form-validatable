@@ -21,14 +21,15 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
     static contextType = FormContext;
 
     static propTypes = {
-      name: PropTypes.string.isRequired,
       rule: PropTypes.string,
       asyncRule: PropTypes.string,
-      defaultValue: PropTypes.any,
       customErrorMessages: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object,
       ]),
+
+      name: PropTypes.string.isRequired,
+      defaultValue: PropTypes.any,
       optional: PropTypes.bool,
       onChange: PropTypes.func,
       onBlur: PropTypes.func,
@@ -152,13 +153,15 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
      */
     render() {
       const { validateInputs, validateSubmitted, validateLang } = this.context;
-      const { name, customErrorMessages, defaultValue } = this.props;
+      const {
+        name, customErrorMessages, defaultValue, rule, asyncRule, ...other
+      } = this.props;
       const input = validateInputs[name];
       return (
         input
           ? (
             <Component
-              {...this.props}
+              {...other}
               lang={validateLang}
               submitted={validateSubmitted}
               validated={input.validated}

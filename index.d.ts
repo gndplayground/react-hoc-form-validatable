@@ -10,7 +10,9 @@ export type SubmitCallback = (
 export interface FormValidateProps {
     validateLang?: string;
     submitCallback?: SubmitCallback;
-    errorCallback?: () => void;
+    errorCallback?: (inputs: {
+        [key: string]: InputStates;
+    }) => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: any;
 }
