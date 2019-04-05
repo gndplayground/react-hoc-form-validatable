@@ -4,7 +4,8 @@
 
 ## Most important news
 ### v0.5.6
-- Filter unwanted props to HOCInput children
+- Filter unwanted props to HOCInput children.
+- Improve typescript d.ts.
 
 ### v0.5.0
 - Remove babel-cli as dep
