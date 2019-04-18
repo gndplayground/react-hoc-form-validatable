@@ -153,7 +153,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
         [name]: { $set: newInputState },
       };
 
-      if (isTriggerByFormControl) {
+      if (isTriggerByFormControl && inputStateTrigger) {
         prepareUpdateInputsState[inputStateTrigger.name] = { $set: inputStateTrigger };
       }
 
