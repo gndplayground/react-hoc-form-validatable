@@ -77,7 +77,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
       return false;
     };
 
-    _unRegister = (input) => {
+    _unRegister = (input, done) => {
       if (!this._isUnmounted) {
         this.setState((state) => {
           const newState = cloneDeep(state.inputs);
@@ -94,6 +94,11 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
             hasError,
             inputs: newState,
           };
+        }, () => {
+          if (done) {
+            const { inputs } = this.state;
+            done(input, cloneDeep(inputs));
+          }
         });
       }
     };
@@ -104,17 +109,26 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
      * @param {Object} dataInput
      * @private
      */
-    _register = (input, dataInput) => {
+    _register = (input, dataInput, options) => {
       if (!this._isUnmounted) {
+        const { inputs } = this.state;
+        const noExist = !inputs[input];
         this.setState((state) => {
           const hasError = typeof dataInput.error === 'undefined' ? state.hasError : this._checkHasError(dataInput.error, input, state.inputs);
-          const inputs = Object.assign(state.inputs, {
+          const inputsNew = Object.assign(state.inputs, {
             [input]: update(state.inputs[input] || {}, { $merge: dataInput }),
           });
           return {
             hasError,
-            inputs,
+            inputs: inputsNew,
           };
+        }, () => {
+          const { inputs: newInputs } = this.state;
+          if (options && noExist && options.cbWhenRegistered) {
+            options.cbWhenRegistered(input, cloneDeep(newInputs));
+          } else if (options && options.cbWhenUpdated) {
+            options.cbWhenUpdated(input, cloneDeep(newInputs));
+          }
         });
       }
     };

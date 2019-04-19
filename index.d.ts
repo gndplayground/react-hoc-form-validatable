@@ -34,6 +34,8 @@ export interface InputValidateProps {
     customErrorMessages?: {
         [k: string]: any;
     };
+    onUnRegistered?: (name: string, allInputs: {[k: string]: InputStates}) => void;
+    onRegistered?: (name: string, allInputs: {[k: string]: InputStates}) => void;
 }
 
 export interface InputValidateChildProps {
@@ -46,13 +48,13 @@ export interface InputValidateChildProps {
     defaultValue: any;
     type: string;
     name: string;
-    onBlur: () => void;
-    onChange: () => void;
     errorMessage: string;
     label: string;
     lang: string;
     pending: boolean;
     onChangeValue: () => void;
+    onBlur: () => void;
+    onChange: () => void;
 }
 
 export interface InputStates {

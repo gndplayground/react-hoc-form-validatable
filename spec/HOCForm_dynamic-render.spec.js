@@ -13,9 +13,13 @@ describe('Test form with dynamic inputs', () => {
   let handlerSubmit;
   let instance;
   let HOCForm;
+  let onUnRegistered;
+  let onRegistered;
 
   beforeEach(() => {
     handlerSubmit = spy();
+    onUnRegistered = spy();
+    onRegistered = spy();
 
     class DynamicExample extends React.Component {
       constructor(props) {
@@ -54,7 +58,8 @@ describe('Test form with dynamic inputs', () => {
                 }],
               },
             });
-          });
+          },
+        );
       };
 
       removeInput = () => {
@@ -83,8 +88,8 @@ describe('Test form with dynamic inputs', () => {
           >
 
             {
-                this.state.inputs.map(test => <Input {...test} key={test.id} />)
-              }
+              this.state.inputs.map(test => <Input onUnRegistered={onUnRegistered} onRegistered={onRegistered} {...test} key={test.id} />)
+            }
 
           </Form>
         );
@@ -102,6 +107,7 @@ describe('Test form with dynamic inputs', () => {
   describe('Test dynamic register and un register input', () => {
     it('Should register new input success', () => {
       instance.addInput('newAdded');
+      expect(onRegistered.called).toEqual(true);
       expect(HOCForm.state.inputs.hasOwnProperty('newAdded')).toEqual(true);
     });
 
@@ -109,6 +115,7 @@ describe('Test form with dynamic inputs', () => {
       instance.addInput('newAdded');
       expect(HOCForm.state.inputs.hasOwnProperty('newAdded')).toEqual(true);
       instance.removeInput();
+      expect(onUnRegistered.called).toEqual(true);
       expect(HOCForm.state.inputs.hasOwnProperty('newAdded')).toEqual(false);
     });
   });

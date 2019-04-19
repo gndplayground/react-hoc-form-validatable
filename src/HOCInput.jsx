@@ -33,6 +33,8 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
       optional: PropTypes.bool,
       onChange: PropTypes.func,
       onBlur: PropTypes.func,
+      onUnRegistered: PropTypes.func,
+      onRegistered: PropTypes.func,
     };
 
     /**
@@ -41,7 +43,7 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
     componentWillMount() {
       const { validateRegister } = this.context;
       const {
-        name, defaultValue, rule, asyncRule, optional,
+        name, defaultValue, rule, asyncRule, optional, onRegistered,
       } = this.props;
       validateRegister(
         name,
@@ -53,6 +55,9 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
           asyncRule,
           optional,
         },
+        {
+          cbWhenRegistered: onRegistered,
+        },
       );
     }
 
@@ -60,7 +65,7 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
       const {
         defaultValue, rule, asyncRule, optional, name,
       } = this.props;
-      const { validateRegister, validateInputs } = this.context;
+      const { validateRegister, validateInputs, validateInputOnChange } = this.context;
       if (
         nextProps.defaultValue !== defaultValue
           || nextProps.rule !== rule
@@ -80,14 +85,19 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
             asyncRule: nextProps.asyncRule,
             optional: nextProps.optional,
           },
+          {
+            cbWhenUpdated: (inputName, inputs) => {
+              validateInputOnChange(name, inputs[inputName].value, inputs[inputName].files);
+            },
+          },
         );
       }
     }
 
     componentWillUnmount() {
       const { validateUnRegister } = this.context;
-      const { name } = this.props;
-      validateUnRegister(name);
+      const { name, onUnRegistered } = this.props;
+      validateUnRegister(name, onUnRegistered);
     }
 
     /**
@@ -154,6 +164,7 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
     render() {
       const { validateInputs, validateSubmitted, validateLang } = this.context;
       const {
+        onUnRegistered, onRegistered,
         name, customErrorMessages, defaultValue, rule, asyncRule, ...other
       } = this.props;
       const input = validateInputs[name];
