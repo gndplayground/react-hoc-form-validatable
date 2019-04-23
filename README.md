@@ -3,6 +3,15 @@
 [![dependencies Status](https://david-dm.org/gndplayground/react-hoc-form-validatable/status.svg)](https://david-dm.org/gndplayground/react-hoc-form-validatable)
 
 ## Most important news
+### v0.7.0
+#### `Breaking changes`: 
+- Props dirty now only equal to true when the new value is !== old value (shallow compare). 
+Before v0.7.0 prop dirty equal to true when on change new value, form submit.
+
+### v0.6.0
+- Fix change default value no re validate input. 
+- Add onUnRegistered, onRegistered callback for HOCInput.
+
 ### v0.5.6
 - Filter unwanted props to HOCInput children.
 - Improve typescript d.ts.
@@ -17,11 +26,6 @@
 - Now support multiple async rules.
 - Added `errorAsyncRuleCallback` to handle errors in async rules. 
 - Partial support typescript (need improve more)
-
-### v0.3.3
-* Add support for error callback when submit form. [See](https://github.com/gndplayground/react-hoc-form-validatable/blob/master/docs/3.HOCForm.md).
-### v0.3.2
-* Add support for native callback onChange and onBlur on input.
 
 ## Intro
 

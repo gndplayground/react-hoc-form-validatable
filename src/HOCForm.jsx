@@ -196,7 +196,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
         this._register(name, {
           pending: true,
           validated: false,
-          dirty: true,
+          dirty: newInputState.value !== inputs[name].value,
           value,
           files,
           errorRule: response.errorRule,
@@ -239,7 +239,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
             validated: true,
             value,
             files,
-            dirty: true,
+            dirty: Boolean(inputs[name].dirty),
             error,
             errorRule: error ? inputRules[errorIn] : '',
             errorMessage: !error ? '' : formatMessage(
@@ -262,7 +262,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
       } else {
         this._register(name, {
           validated: true,
-          dirty: true,
+          dirty: newInputState.value !== inputs[name].value,
           pending: false,
           files,
           value,
@@ -344,7 +344,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
               [input]: {
                 validated: { $set: Boolean(!inputsAsyncRule[input]) },
                 pending: { $set: Boolean(inputsAsyncRule[input]) },
-                dirty: { $set: true },
+                dirty: { $set: Boolean(newState.inputs[input].dirty) },
                 error: { $set: !response.check },
                 errorMessage: { $set: response.message },
                 errorRule: { $set: response.errorRule },
@@ -410,7 +410,7 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
                   [input]: {
                     $merge: {
                       validated: true,
-                      dirty: true,
+                      dirty: Boolean(state.inputs[input].dirty),
                       error,
                       pending: false,
                       errorRule: error

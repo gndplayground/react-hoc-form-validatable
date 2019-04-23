@@ -186,19 +186,19 @@ describe('Test render validate form with no async rules', () => {
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
       expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
       expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
 
@@ -216,7 +216,7 @@ describe('Test render validate form with no async rules', () => {
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
       expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
@@ -228,7 +228,7 @@ describe('Test render validate form with no async rules', () => {
       expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
 

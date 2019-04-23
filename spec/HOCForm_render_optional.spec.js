@@ -73,13 +73,13 @@ describe('Test render validate form with optional input and no async rules', () 
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: false,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
       expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         submitted: false,
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
 

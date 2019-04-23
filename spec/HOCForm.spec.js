@@ -102,6 +102,7 @@ describe('Test methods for HOCForm', () => {
           name: {
             value: '12345',
             rule: 'minLength,10',
+            dirty: true,
           },
         },
       };
@@ -150,6 +151,7 @@ describe('Test methods for HOCForm', () => {
             asyncRule: 'asyncTest',
             value: '12345',
             rule: 'minLength,4',
+            dirty: true,
           },
         },
       };
@@ -227,6 +229,7 @@ describe('Test methods for HOCForm', () => {
             asyncRule: 'asyncTest',
             value: '12345',
             rule: 'minLength,10',
+            dirty: false,
           },
         },
       };
@@ -252,7 +255,7 @@ describe('Test methods for HOCForm', () => {
               validated: true,
               asyncRule: 'asyncTest',
               value: '12345',
-              dirty: true,
+              dirty: false,
               error: true,
               errorMessage: 'The value entered must be at least 10 characters.',
               errorRule: 'minLength,10',

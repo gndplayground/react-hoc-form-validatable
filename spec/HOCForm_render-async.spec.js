@@ -191,6 +191,7 @@ describe('Test render validate form with async rules always return true', () => 
       setTimeout(() => {
         try {
           FromTestRender.update();
+          console.log(FromTestRender.find('Input').getElements()[0].props);
           expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
             value: '12345',
             error: false,
@@ -261,12 +262,12 @@ describe('Test render validate form with async rules always return true', () => 
       }));
       expect(FromTestRender.find('Input').getElements()[1].props).toEqual(jasmine.objectContaining({
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
       expect(FromTestRender.find('Input').getElements()[2].props).toEqual(jasmine.objectContaining({
         error: true,
-        dirty: true,
+        dirty: false,
         validated: true,
       }));
 

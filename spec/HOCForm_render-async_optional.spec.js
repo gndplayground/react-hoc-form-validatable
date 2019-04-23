@@ -65,7 +65,7 @@ describe('Test render validate form with async rules always return true', () => 
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         error: false,
-        dirty: true,
+        dirty: false,
         validated: true,
         pending: false,
       }));
@@ -73,7 +73,7 @@ describe('Test render validate form with async rules always return true', () => 
       expect(FromTestRender.find('Input').getElements()[0].props).toEqual(jasmine.objectContaining({
         value: '',
         error: false,
-        dirty: true,
+        dirty: false,
         validated: true,
         pending: false,
       }));
