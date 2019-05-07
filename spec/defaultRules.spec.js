@@ -19,6 +19,10 @@ describe('notEmpty rule', () => {
   it('Should return true when value is empty', () => {
     expect(defaultRules.notEmpty.rule('')).toEqual(false);
   });
+
+  it('Should return true when value is empty array', () => {
+    expect(defaultRules.notEmpty.rule([])).toEqual(false);
+  });
 });
 
 describe('minLength rule', () => {

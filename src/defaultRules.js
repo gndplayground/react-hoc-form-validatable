@@ -8,6 +8,9 @@ const ruleObDefault = {
 
   notEmpty: {
     rule(value) {
+      if (Array.isArray(value)) {
+        return value.length > 0;
+      }
       const val = typeof value === 'string' ? value.trim() : value;
       return !(val === null || val === '' || val === undefined);
     },
