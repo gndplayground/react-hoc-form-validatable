@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash.isequal';
 import { formatMessage, getRuleNameAndParams } from './validateHelpers';
 import FormContext from './context';
 
@@ -40,7 +41,7 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
     /**
      * React life cycle
      */
-    componentWillMount() {
+    componentDidMount() {
       const { validateRegister } = this.context;
       const {
         name, defaultValue, rule, asyncRule, optional, onRegistered,
@@ -61,29 +62,29 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
       );
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
       const {
         defaultValue, rule, asyncRule, optional, name,
       } = this.props;
       const { validateRegister, validateInputs, validateInputOnChange } = this.context;
       if (
-        nextProps.defaultValue !== defaultValue
-          || nextProps.rule !== rule
-          || nextProps.asyncRule !== asyncRule
-          || nextProps.optional !== optional
+        !isEqual(prevProps.defaultValue, defaultValue)
+          || prevProps.rule !== rule
+          || prevProps.asyncRule !== asyncRule
+          || prevProps.optional !== optional
       ) {
         const input = validateInputs[name];
         validateRegister(
           name,
           {
             name,
-            defaultValue: nextProps.defaultValue,
+            defaultValue: prevProps.defaultValue,
             value: defaultValue === input.value
-                && nextProps.defaultValue !== defaultValue
-              ? nextProps.defaultValue : input.value,
-            rule: nextProps.rule,
-            asyncRule: nextProps.asyncRule,
-            optional: nextProps.optional,
+                && prevProps.defaultValue !== defaultValue
+              ? prevProps.defaultValue : input.value,
+            rule: prevProps.rule,
+            asyncRule: prevProps.asyncRule,
+            optional: prevProps.optional,
           },
           {
             cbWhenUpdated: (inputName, inputs) => {
