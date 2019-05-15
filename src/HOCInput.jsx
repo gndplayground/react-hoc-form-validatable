@@ -67,21 +67,21 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
         defaultValue, rule, asyncRule, optional, name,
       } = this.props;
       const { validateRegister, validateInputs, validateInputOnChange } = this.context;
+      const isNewDefaultValue = !isEqual(prevProps.defaultValue, defaultValue);
+      const input = validateInputs[name];
       if (
-        !isEqual(prevProps.defaultValue, defaultValue)
+        isNewDefaultValue
           || prevProps.rule !== rule
           || prevProps.asyncRule !== asyncRule
           || prevProps.optional !== optional
       ) {
-        const input = validateInputs[name];
         validateRegister(
           name,
           {
             name,
             defaultValue: prevProps.defaultValue,
-            value: defaultValue === input.value
-                && prevProps.defaultValue !== defaultValue
-              ? prevProps.defaultValue : input.value,
+            value: !input.dirty && isNewDefaultValue
+              ? defaultValue : input.value,
             rule: prevProps.rule,
             asyncRule: prevProps.asyncRule,
             optional: prevProps.optional,
