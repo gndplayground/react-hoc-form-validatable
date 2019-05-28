@@ -14,7 +14,9 @@ export interface FormValidateProps {
         [key: string]: InputStates;
     }) => void;
     errorAsyncRuleCallback?: (error: Error) => void;
-    rules: any;
+    rules: {
+        [key: string]: ValidationRuleDefine
+    };
 }
 
 export interface FormValidateChildProps {
