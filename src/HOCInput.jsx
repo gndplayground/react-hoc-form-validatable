@@ -82,9 +82,9 @@ const HOCInput = Component => class HOCInputValidateAble extends React.Component
             defaultValue: prevProps.defaultValue,
             value: !input.dirty && isNewDefaultValue
               ? defaultValue : input.value,
-            rule: prevProps.rule,
-            asyncRule: prevProps.asyncRule,
-            optional: prevProps.optional,
+            rule,
+            asyncRule,
+            optional,
           },
           {
             cbWhenUpdated: (inputName, inputs) => {
