@@ -10,12 +10,10 @@ export type SubmitCallback = (
 export interface FormValidateProps {
     validateLang?: string;
     submitCallback?: SubmitCallback;
-    errorCallback?: (inputs: {
-        [key: string]: InputStates;
-    }) => void;
+    errorCallback?: (inputs: {[key: string]: InputStates}) => void;
     errorAsyncRuleCallback?: (error: Error) => void;
     rules: {
-        [key: string]: ValidationRuleDefine
+        [key: string]: ValidationRuleDefine;
     };
 }
 
@@ -36,7 +34,10 @@ export interface InputValidateProps {
     customErrorMessages?: {
         [k: string]: any;
     };
-    onUnRegistered?: (name: string, allInputs: {[k: string]: InputStates}) => void;
+    onUnRegistered?: (
+        name: string,
+        allInputs: {[k: string]: InputStates},
+    ) => void;
     onRegistered?: (name: string, allInputs: {[k: string]: InputStates}) => void;
 }
 
@@ -133,7 +134,13 @@ declare function HOCInput<P = {}>(
 
 export const FormContext: React.Context<{
     validateLang: string;
-    validateInputOnChange: (name: string, value: any, files: FileList | undefined, isTriggerByFormControl?: boolean) => void;
+    validateInputOnChange: (
+        name: string,
+        value: any,
+        files: FileList | undefined,
+        isTriggerByFormControl?: boolean,
+        inputStateTrigger?: InputStates,
+    ) => void;
     validateInputs: {
         [key: string]: InputStates;
     };
