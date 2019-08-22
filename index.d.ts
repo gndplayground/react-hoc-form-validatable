@@ -125,11 +125,15 @@ declare const defaultRules: {
 };
 
 declare function HOCForm<P = {}>(
-    Component: React.ComponentType<Omit<P, FormValidateProps>>,
+    Component: React.ComponentType<
+        Omit<P, FormValidateProps> & FormValidateChildProps
+        >,
 ): React.ComponentType<P & FormValidateProps>;
 
 declare function HOCInput<P = {}>(
-    Component: React.ComponentType<Omit<P, InputValidateProps>>,
+    Component: React.ComponentType<
+        Omit<P, InputValidateProps> & InputValidateChildProps
+        >,
 ): React.ComponentType<P & InputValidateProps>;
 
 export const FormContext: React.Context<{
