@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import update from 'immutability-helper';
+import isEqual from 'lodash.isequal';
 import cloneDeep from 'lodash.clonedeep';
 import { validate, getRuleNameAndParams, formatMessage } from './validateHelpers';
 import cancelablePromise from './cancelablePromise';
@@ -196,7 +197,8 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
         this._register(name, {
           pending: true,
           validated: false,
-          dirty: newInputState.value !== inputs[name].value,
+          dirty: newInputState.value !== inputs[name].value
+            && !isEqual(newInputState.value, newInputState.defaultValue),
           value,
           files,
           errorRule: response.errorRule,
@@ -262,7 +264,8 @@ const HOCForm = Component => class HOCFormValidateAble extends React.Component {
       } else {
         this._register(name, {
           validated: true,
-          dirty: newInputState.value !== inputs[name].value,
+          dirty: newInputState.value !== inputs[name].value
+            && !isEqual(newInputState.value, newInputState.defaultValue),
           pending: false,
           files,
           value,
