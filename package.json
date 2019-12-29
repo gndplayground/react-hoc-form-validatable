@@ -73,7 +73,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "sinon": "^2.1.0",
-    "style-loader": "^0.23.1",
+    "style-loader": "^1.1.2",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
