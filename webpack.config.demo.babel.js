@@ -38,9 +38,7 @@ const config = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new CleanWebpackPlugin(['./demo'], {
-      root: process.cwd(),
-    }),
+    new CleanWebpackPlugin.CleanWebpackPlugin({}),
     // new webpack.optimize.UglifyJsPlugin({
     //   beautify: false,
     //   comments: false,
