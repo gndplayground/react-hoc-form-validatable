@@ -1,0 +1,55 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "22:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: postcss
+    versions:
+    - 8.2.10
+    - 8.2.12
+    - 8.2.4
+    - 8.2.5
+    - 8.2.6
+    - 8.2.7
+    - 8.2.8
+    - 8.2.9
+  - dependency-name: "@babel/core"
+    versions:
+    - 7.12.10
+    - 7.12.13
+    - 7.12.16
+    - 7.12.17
+    - 7.13.1
+    - 7.13.10
+    - 7.13.13
+    - 7.13.14
+    - 7.13.15
+    - 7.13.8
+  - dependency-name: "@babel/register"
+    versions:
+    - 7.12.10
+    - 7.12.13
+    - 7.13.0
+    - 7.13.14
+    - 7.13.8
+  - dependency-name: mocha
+    versions:
+    - 8.2.1
+    - 8.3.0
+    - 8.3.1
+  - dependency-name: "@types/react-dom"
+    versions:
+    - 17.0.0
+    - 17.0.1
+    - 17.0.2
+  - dependency-name: "@babel/preset-react"
+    versions:
+    - 7.12.10
+    - 7.12.13
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
